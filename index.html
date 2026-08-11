@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kita Berkah Teknik | Jasa Service AC Profesional</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="assets/logo-icon.png" />
+    <style>
+        .logo-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+        }
+        .hero-image .mockup .mockup-logo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 24px rgba(0, 86, 167, 0.25);
+        }
+        .about-image .about-logo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(0, 86, 167, 0.25);
+        }
+        .footer-brand .logo-img {
+            width: 40px;
+            height: 40px;
+        }
+        /* ----- RESET & BASE ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e1e2a;
+            background: #f8fafc;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ----- TYPOGRAPHY ----- */
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .section-sub {
+            font-size: 1.1rem;
+            color: #4a5568;
+            max-width: 640px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ----- COLORS ----- */
+        :root {
+            --primary: #0056a7;
+            /* deep blue — like Carrier */
+            --primary-dark: #003b73;
+            --primary-light: #e6f0fa;
+            --accent: #ffb347;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-600: #4a5568;
+            --gray-800: #1e293b;
+            --white: #ffffff;
+            --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ----- BUTTONS ----- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 14px 34px;
+            border-radius: 60px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(0, 86, 167, 0.30);
+        }
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 86, 167, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: #1e1e2a;
+            box-shadow: 0 4px 14px rgba(255, 179, 71, 0.35);
+        }
+        .btn-accent:hover {
+            background: #e89f2f;
+            color: #1e1e2a;
+            box-shadow: 0 8px 28px rgba(255, 179, 71, 0.40);
+        }
+
+        /* ----- HEADER / NAV ----- */
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 0;
+        }
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+            letter-spacing: -0.03em;
+        }
+        .logo i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        .logo span {
+            color: var(--gray-800);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            font-weight: 500;
+            color: var(--gray-800);
+        }
+        .nav-links a {
+            transition: color 0.2s;
+            font-size: 0.95rem;
+            position: relative;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.25s;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-cta {
+            background: var(--primary);
+            color: #fff !important;
+            padding: 10px 22px;
+            border-radius: 60px;
+            font-weight: 600;
+        }
+        .nav-cta:hover {
+            background: var(--primary-dark) !important;
+            color: #fff !important;
+        }
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--gray-800);
+        }
+
+        /* ----- HERO ----- */
+        .hero {
+            padding: 80px 0 100px;
+            background: linear-gradient(145deg, #f1f7fe 0%, #ffffff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .hero-content h1 {
+            font-size: 3.4rem;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        .hero-content h1 .highlight {
+            color: var(--primary);
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--gray-600);
+            max-width: 500px;
+            margin-bottom: 32px;
+        }
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero-image .mockup {
+            background: var(--white);
+            border-radius: 32px;
+            padding: 30px 40px;
+            box-shadow: var(--shadow-hover);
+            border: 1px solid rgba(0, 86, 167, 0.08);
+            text-align: center;
+            width: 100%;
+            max-width: 480px;
+        }
+        .hero-image .mockup i {
+            font-size: 6rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        .hero-image .mockup h3 {
+            font-size: 1.6rem;
+            color: var(--gray-800);
+        }
+        .hero-image .mockup p {
+            color: var(--gray-600);
+            margin-top: 6px;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 600;
+            padding: 6px 18px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ----- SERVICES ----- */
+        .services {
+            padding: 90px 0;
+            background: var(--white);
+        }
+        .services .section-sub {
+            margin-bottom: 48px;
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 32px;
+        }
+        .service-card {
+            background: var(--gray-100);
+            padding: 36px 28px;
+            border-radius: 24px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .service-card:hover {
+            background: var(--white);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-6px);
+        }
+        .service-card .icon {
+            font-size: 2.6rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        .service-card p {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        /* ----- ABOUT ----- */
+        .about {
+            padding: 90px 0;
+            background: #fafcff;
+        }
+        .about .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .about-image {
+            background: var(--primary-light);
+            border-radius: 32px;
+            padding: 40px;
+            text-align: center;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .about-image i {
+            font-size: 5rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        .about-image h3 {
+            font-size: 1.6rem;
+            color: var(--primary-dark);
+        }
+        .about-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+        }
+        .about-text p {
+            color: var(--gray-600);
+            margin-bottom: 20px;
+        }
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 24px;
+        }
+        .stat-item {
+            background: var(--white);
+            padding: 20px 16px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .stat-item .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .stat-item .label {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        /* ----- WHY US ----- */
+        .whyus {
+            padding: 90px 0;
+            background: var(--white);
+        }
+        .whyus .section-sub {
+            margin-bottom: 48px;
+        }
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+        }
+        .why-item {
+            text-align: center;
+            padding: 32px 20px;
+            border-radius: 24px;
+            background: var(--gray-100);
+            transition: 0.25s;
+        }
+        .why-item:hover {
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+        .why-item i {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        .why-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+        .why-item p {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        /* ----- TESTIMONIALS ----- */
+        .testimonials {
+            padding: 90px 0;
+            background: var(--gray-100);
+        }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+        .testimonial-card {
+            background: var(--white);
+            padding: 32px 28px;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            transition: 0.25s;
+        }
+        .testimonial-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+        }
+        .testimonial-card .stars {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+        .testimonial-card blockquote {
+            font-size: 1.05rem;
+            font-style: italic;
+            color: var(--gray-800);
+            margin-bottom: 16px;
+        }
+        .testimonial-card .author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .testimonial-card .author .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        .testimonial-card .author .name {
+            font-weight: 600;
+        }
+        .testimonial-card .author .title {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        /* ----- CONTACT / CTA ----- */
+        .contact {
+            padding: 90px 0;
+            background: var(--primary);
+            color: #fff;
+        }
+        .contact .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .contact-info h2 {
+            font-size: 2.4rem;
+            margin-bottom: 16px;
+        }
+        .contact-info p {
+            opacity: 0.85;
+            font-size: 1.1rem;
+            margin-bottom: 28px;
+            max-width: 440px;
+        }
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .contact-detail i {
+            font-size: 1.4rem;
+            width: 32px;
+            color: var(--accent);
+        }
+        /* ----- BOOKING FORM (service qty stepper) ----- */
+        .booking-service-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #f8fafc;
+            border-radius: 14px;
+            margin-bottom: 10px;
+        }
+        .booking-service-item .bsi-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .booking-service-item .bsi-info .bsi-name {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--gray-800);
+        }
+        .booking-service-item .bsi-info .bsi-price {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .qty-stepper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            border: 1px solid var(--gray-200);
+            border-radius: 60px;
+            padding: 4px;
+        }
+        .qty-stepper button {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .qty-stepper button:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        .qty-stepper .qty-value {
+            min-width: 18px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+        .booking-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 4px;
+            margin: 6px 0 18px;
+            border-top: 2px dashed var(--gray-200);
+            font-size: 1.05rem;
+        }
+        .booking-total .total-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .booking-note {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            margin: -6px 0 18px;
+        }
+        .contact-form {
+            background: #fff;
+            padding: 40px 36px;
+            border-radius: 28px;
+            color: #1e1e2a;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+        .contact-form h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+        .contact-form .form-group {
+            margin-bottom: 18px;
+        }
+        .contact-form label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            background: #fafcff;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 86, 167, 0.10);
+        }
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .contact-form .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 16px;
+            font-size: 1.05rem;
+            background: var(--primary);
+        }
+        .contact-form .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ----- FOOTER ----- */
+        .footer {
+            background: #0b1a2b;
+            color: #cbd5e1;
+            padding: 60px 0 30px;
+        }
+        .footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+        .footer-brand .logo {
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .footer-brand .logo span {
+            color: #fff;
+        }
+        .footer-brand p {
+            font-size: 0.95rem;
+            max-width: 280px;
+            opacity: 0.8;
+        }
+        .footer h4 {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+        .footer ul li a {
+            opacity: 0.8;
+            transition: 0.2s;
+        }
+        .footer ul li a:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 40px;
+            padding-top: 24px;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* ----- RESPONSIVE ----- */
+        @media (max-width: 1024px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-actions {
+                justify-content: center;
+            }
+            .about .container {
+                grid-template-columns: 1fr;
+            }
+            .contact .container {
+                grid-template-columns: 1fr;
+            }
+            .footer .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                padding: 20px 0;
+                gap: 16px;
+                background: var(--white);
+                border-top: 1px solid var(--gray-200);
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .hamburger {
+                display: block;
+            }
+            .header .container {
+                padding: 0 16px;
+            }
+            .hero {
+                padding: 48px 0 60px;
+            }
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .about-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .contact-form {
+                padding: 28px 20px;
+            }
+            .footer .container {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">
+                <img src="assets/logo-kbt.png" alt="Logo Kita Berkah Teknik" class="logo-img" />
+                Kita Berkah <span>Teknik</span>
+            </a>
+            <div class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav class="nav-links" id="navLinks">
+                <a href="#services">Layanan</a>
+                <a href="#harga">Harga</a>
+                <a href="#about">Tentang</a>
+                <a href="#whyus">Keunggulan</a>
+                <a href="#testimonials">Testimoni</a>
+                <a href="#contact" class="nav-cta">Hubungi Kami</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-check-circle"></i> Profesional & Terpercaya
+                </div>
+                <h1>
+                    Solusi Service AC<br />
+                    <span class="highlight">Terbaik</span> untuk Rumah & Kantor
+                </h1>
+                <p>
+                    Kita Berkah Teknik menghadirkan layanan perbaikan, perawatan, dan
+                    pemasangan AC dengan teknisi bersertifikat dan harga transparan.
+                </p>
+                <div class="hero-actions">
+                    <a href="#contact" class="btn">
+                        <i class="fas fa-calendar-check"></i> Booking Sekarang
+                    </a>
+                    <a href="#services" class="btn btn-outline">
+                        <i class="fas fa-arrow-right"></i> Lihat Layanan
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="mockup">
+                    <img src="assets/logo-kbt.png" alt="Logo Kita Berkah Teknik" class="mockup-logo" />
+                    <h3>Kita Berkah Teknik</h3>
+                    <p>AC Service &amp; Maintenance</p>
+                    <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: center; font-size: 1.4rem; color: var(--primary);">
+                        <i class="fas fa-tools"></i>
+                        <i class="fas fa-fan"></i>
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Layanan Profesional Kami</h2>
+                <p class="section-sub mx-auto">
+                    Dari perbaikan ringan hingga instalasi baru, kami siap membantu
+                    dengan standar kualitas tinggi.
+                </p>
+            </div>
+            <div class="service-grid">
+                <div class="service-card">
+                    <div class="icon"><i class="fas fa-screwdriver-wrench"></i></div>
+                    <h3>Service &amp; Perbaikan</h3>
+                    <p>Penanganan cepat untuk AC tidak dingin, bocor, atau rusak. Diagnosa akurat dan perbaikan efisien.</p>
+                </div>
+                <div class="service-card">
+                    <div class="icon"><i class="fas fa-broom"></i></div>
+                    <h3>Pembersihan &amp; Perawatan</h3>
+                    <p>Cuci evaporator, filter, dan blower secara mendalam. AC lebih sehat, dingin, dan hemat listrik.</p>
+                </div>
+                <div class="service-card">
+                    <div class="icon"><i class="fas fa-plus-circle"></i></div>
+                    <h3>Pemasangan Baru</h3>
+                    <p>Instalasi AC split, cassette, atau central dengan presisi. Konsultasi gratis untuk kebutuhan Anda.</p>
+                </div>
+                <div class="service-card">
+                    <div class="icon"><i class="fas fa-exchange-alt"></i></div>
+                    <h3>Bongkar &amp; Pasang</h3>
+                    <p>Pindah AC dengan aman, termasuk pengecekan gas dan pipa. Garansi kepuasan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== DAFTAR HARGA ===== -->
+    <section class="services" id="harga" style="background: var(--gray-100);">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Daftar Harga Cuci AC</h2>
+                <p class="section-sub mx-auto">
+                    Harga transparan sesuai jenis layanan dan ukuran PK unit AC Anda.
+                </p>
+            </div>
+            <div class="service-grid" style="margin-top: 48px;">
+                <div class="service-card" style="background: var(--white);">
+                    <div class="icon"><i class="fas fa-droplet"></i></div>
+                    <h3>Perawatan Cuci AC</h3>
+                    <p style="margin-bottom: 16px;">Cuci rutin untuk menjaga AC tetap dingin dan bersih.</p>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
+                        <span style="font-size: 0.9rem; color: var(--gray-600);">1/2 PK – 1 PK</span>
+                        <strong style="color: var(--primary);">Rp 80.000</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
+                        <span style="font-size: 0.9rem; color: var(--gray-600);">1.5 PK – 2 PK</span>
+                        <strong style="color: var(--primary);">Rp 100.000</strong>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--white);">
+                    <div class="icon"><i class="fas fa-shower"></i></div>
+                    <h3>Semi Cuci Turun</h3>
+                    <p style="margin-bottom: 16px;">Unit diturunkan sebagian untuk pembersihan lebih menyeluruh.</p>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
+                        <span style="font-size: 0.9rem; color: var(--gray-600);">1/2 PK – 1 PK</span>
+                        <strong style="color: var(--primary);">Rp 150.000</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
+                        <span style="font-size: 0.9rem; color: var(--gray-600);">1.5 PK – 2 PK</span>
+                        <strong style="color: var(--primary);">Rp 200.000</strong>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--white);">
+                    <div class="icon"><i class="fas fa-spray-can-sparkles"></i></div>
+                    <h3>Deep Cleaning / Cuci Turun</h3>
+                    <p style="margin-bottom: 16px;">Unit diturunkan penuh untuk pembersihan paling maksimal.</p>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
+                        <span style="font-size: 0.9rem; color: var(--gray-600);">1/2 PK – 1 PK</span>
+                        <strong style="color: var(--primary);">Rp 350.000</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
+                        <span style="font-size: 0.9rem; color: var(--gray-600);">1.5 PK – 2 PK</span>
+                        <strong style="color: var(--primary);">Rp 450.000</strong>
+                    </div>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 32px;">
+                <div style="background: var(--white); border-radius: 20px; padding: 24px 28px; box-shadow: var(--shadow);">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;"><i class="fas fa-shield-alt"></i> Garansi Cuci 1 Bulan</h4>
+                    <p style="font-size: 0.9rem; color: var(--gray-600);">Netes air, bunyi setelah dicuci, dan human error ditanggung dalam masa garansi.</p>
+                </div>
+                <div style="background: var(--white); border-radius: 20px; padding: 24px 28px; box-shadow: var(--shadow);">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;"><i class="fas fa-truck"></i> Ketentuan Tambahan</h4>
+                    <p style="font-size: 0.9rem; color: var(--gray-600);">Lebih dari 10KM, apartemen, atau mall dikenakan tambahan transport &amp; akses Rp 50.000.</p>
+                </div>
+                <div style="background: var(--white); border-radius: 20px; padding: 24px 28px; box-shadow: var(--shadow);">
+                    <h4 style="color: var(--primary); margin-bottom: 10px;"><i class="fas fa-location-dot"></i> Area Layanan</h4>
+                    <p style="font-size: 0.9rem; color: var(--gray-600);">Jakarta dan sekitarnya. Hubungi kami untuk cek jangkauan area Anda.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-image">
+                <img src="assets/logo-kbt.png" alt="Logo Kita Berkah Teknik" class="about-logo" />
+                <h3>Kita Berkah Teknik</h3>
+                <p style="color: var(--gray-600);">Sejak 2018 • Melayani 500+ Pelanggan</p>
+            </div>
+            <div class="about-text">
+                <h2>Tentang Kita Berkah Teknik</h2>
+                <p>
+                    Kita Berkah Teknik adalah penyedia jasa service AC yang berfokus pada
+                    kualitas, kejujuran, dan kepuasan pelanggan. Kami memahami bahwa
+                    AC yang nyaman adalah kebutuhan utama, sehingga setiap pekerjaan
+                    kami lakukan dengan penuh tanggung jawab.
+                </p>
+                <p>
+                    Teknisi kami bersertifikat dan terus mengikuti perkembangan
+                    teknologi AC terbaru. Kami menggunakan peralatan modern dan
+                    suku cadang original.
+                </p>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <div class="number">500+</div>
+                        <div class="label">Pelanggan Puas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">98%</div>
+                        <div class="label">Tingkat Kepuasan</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">24/7</div>
+                        <div class="label">Layanan Darurat</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">5+</div>
+                        <div class="label">Tahun Pengalaman</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WHY US ===== -->
+    <section class="whyus" id="whyus">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Mengapa Memilih Kita Berkah Teknik?</h2>
+                <p class="section-sub mx-auto">
+                    Kami memberikan nilai lebih yang membuat Anda nyaman dan tenang.
+                </p>
+            </div>
+            <div class="why-grid">
+                <div class="why-item">
+                    <i class="fas fa-user-check"></i>
+                    <h4>Teknisi Bersertifikat</h4>
+                    <p>Tim kami terlatih dan berpengalaman menangani berbagai merek AC.</p>
+                </div>
+                <div class="why-item">
+                    <i class="fas fa-tag"></i>
+                    <h4>Harga Transparan</h4>
+                    <p>Tidak ada biaya tersembunyi. Penawaran jelas sebelum pekerjaan dimulai.</p>
+                </div>
+                <div class="why-item">
+                    <i class="fas fa-clock"></i>
+                    <h4>Tepat Waktu</h4>
+                    <p>Kami menghargai waktu Anda. Datang sesuai jadwal dan bekerja cepat.</p>
+                </div>
+                <div class="why-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Garansi Kepuasan</h4>
+                    <p>Jika ada masalah setelah service, kami akan perbaiki tanpa biaya tambahan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Apa Kata Pelanggan?</h2>
+                <p class="section-sub mx-auto">
+                    Ribuan pelanggan telah merasakan layanan terbaik dari Kita Berkah Teknik.
+                </p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <blockquote>
+                        “AC rumah saya yang sudah 5 tahun akhirnya dingin kembali. Teknisinya ramah dan menjelaskan semua dengan detail. Sangat direkomendasikan!”
+                    </blockquote>
+                    <div class="author">
+                        <div class="avatar">RS</div>
+                        <div>
+                            <div class="name">Rina Setiawati</div>
+                            <div class="title">Ibu Rumah Tangga, Jakarta</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <blockquote>
+                        “Kantor kami menggunakan Kita Berkah Teknik untuk perawatan rutin. Pelayanan cepat, harga masuk akal, dan AC selalu prima.”
+                    </blockquote>
+                    <div class="author">
+                        <div class="avatar">AF</div>
+                        <div>
+                            <div class="name">Andi Firmansyah</div>
+                            <div class="title">Manajer Operasional, Bandung</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <blockquote>
+                        “Pasang AC baru di rumah orang tua. Timnya profesional, rapi, dan selesai tepat waktu. Terima kasih Kita Berkah Teknik!”
+                    </blockquote>
+                    <div class="author">
+                        <div class="avatar">DN</div>
+                        <div>
+                            <div class="name">Dewi Nuraeni</div>
+                            <div class="title">Pengusaha, Surabaya</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-info">
+                <h2>Siap Bantu Kebutuhan AC Anda</h2>
+                <p>
+                    Hubungi kami sekarang untuk konsultasi gratis atau booking
+                    layanan. Tim kami akan segera merespon.
+                </p>
+                <div class="contact-detail">
+                    <i class="fas fa-phone-alt"></i>
+                    <span><strong>0813-1560-4197</strong></span>
+                </div>
+                <div class="contact-detail">
+                    <i class="fas fa-envelope"></i>
+                    <span>info@kitaberkahteknik.id</span>
+                </div>
+                <div class="contact-detail">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Jl. Lontar Dalam No 38 RT 003/004, Tugu Utara, Koja, Jakarta Utara 14260</span>
+                </div>
+                <div class="contact-detail">
+                    <i class="fas fa-clock"></i>
+                    <span>Senin – Sabtu: 08.00 – 20.00</span>
+                </div>
+            </div>
+            <div class="contact-form">
+                <h3><i class="fas fa-paper-plane" style="color: var(--primary);"></i> Booking Layanan</h3>
+                <form id="bookingForm">
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <input type="text" id="name" placeholder="Masukkan nama Anda" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Nomor Telepon</label>
+                        <input type="tel" id="phone" placeholder="0812xxxxx" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Alamat</label>
+                        <input type="text" id="address" placeholder="Alamat lengkap unit AC yang akan dicuci" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pilih Layanan &amp; Jumlah Unit</label>
+                        <div id="bookingServices"></div>
+                    </div>
+
+                    <div class="booking-total">
+                        <span>Estimasi Total</span>
+                        <span class="total-value" id="bookingTotal">Rp 0</span>
+                    </div>
+                    <p class="booking-note">Estimasi belum termasuk biaya transport &amp; akses tambahan (>10KM, apartemen, atau mall: +Rp 50.000).</p>
+
+                    <div class="form-group">
+                        <label for="message">Catatan Tambahan</label>
+                        <textarea id="message" placeholder="Deskripsikan kondisi AC atau kebutuhan Anda..."></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%; justify-content: center;">
+                        <i class="fab fa-whatsapp"></i> Booking via WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <img src="assets/logo-kbt.png" alt="Logo Kita Berkah Teknik" class="logo-img" />
+                    Kita Berkah <span>Teknik</span>
+                </a>
+                <p>Solusi AC profesional untuk hunian dan bisnis Anda. Terpercaya, transparan, dan berkualitas.</p>
+            </div>
+            <div>
+                <h4>Layanan</h4>
+                <ul>
+                    <li><a href="#">Service AC</a></li>
+                    <li><a href="#">Cuci AC</a></li>
+                    <li><a href="#">Pasang AC</a></li>
+                    <li><a href="#">Bongkar Pasang</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Perusahaan</h4>
+                <ul>
+                    <li><a href="#about">Tentang Kami</a></li>
+                    <li><a href="#whyus">Keunggulan</a></li>
+                    <li><a href="#testimonials">Testimoni</a></li>
+                    <li><a href="#contact">Kontak</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Hubungi Kami</h4>
+                <ul>
+                    <li><i class="fas fa-phone" style="width:20px;"></i> 0813-1560-4197</li>
+                    <li><i class="fas fa-envelope" style="width:20px;"></i> info@kitaberkahteknik.id</li>
+                    <li><i class="fas fa-map-marker-alt" style="width:20px;"></i> Tugu Utara, Koja, Jakarta Utara</li>
+                    <li style="display: flex; gap: 12px; margin-top: 8px;">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="https://wa.me/6281315604197" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 Kita Berkah Teknik. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== BOOKING FORM LOGIC ===== -->
+    <script>
+        const WA_NUMBER = '6281315604197';
+
+        const bookingServices = [
+            { id: 'cuci-kecil', name: 'Perawatan Cuci AC (1/2 PK – 1 PK)', price: 80000 },
+            { id: 'cuci-besar', name: 'Perawatan Cuci AC (1.5 PK – 2 PK)', price: 100000 },
+            { id: 'semi-kecil', name: 'Semi Cuci Turun (1/2 PK – 1 PK)', price: 150000 },
+            { id: 'semi-besar', name: 'Semi Cuci Turun (1.5 PK – 2 PK)', price: 200000 },
+            { id: 'deep-kecil', name: 'Deep Cleaning / Cuci Turun (1/2 PK – 1 PK)', price: 350000 },
+            { id: 'deep-besar', name: 'Deep Cleaning / Cuci Turun (1.5 PK – 2 PK)', price: 450000 },
+        ];
+
+        const qty = {};
+        bookingServices.forEach(s => qty[s.id] = 0);
+
+        function formatRupiah(num) {
+            return 'Rp ' + num.toLocaleString('id-ID');
+        }
+
+        function renderBookingServices() {
+            const wrap = document.getElementById('bookingServices');
+            wrap.innerHTML = bookingServices.map(s => `
+                <div class="booking-service-item">
+                    <div class="bsi-info">
+                        <div class="bsi-name">${s.name}</div>
+                        <div class="bsi-price">${formatRupiah(s.price)}</div>
+                    </div>
+                    <div class="qty-stepper">
+                        <button type="button" data-action="dec" data-id="${s.id}">−</button>
+                        <span class="qty-value" id="qty-${s.id}">0</span>
+                        <button type="button" data-action="inc" data-id="${s.id}">+</button>
+                    </div>
+                </div>
+            `).join('');
+
+            wrap.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.dataset.id;
+                    if (btn.dataset.action === 'inc') {
+                        qty[id]++;
+                    } else if (qty[id] > 0) {
+                        qty[id]--;
+                    }
+                    document.getElementById('qty-' + id).textContent = qty[id];
+                    updateTotal();
+                });
+            });
+        }
+
+        function updateTotal() {
+            let total = 0;
+            bookingServices.forEach(s => total += qty[s.id] * s.price);
+            document.getElementById('bookingTotal').textContent = formatRupiah(total);
+            return total;
+        }
+
+        renderBookingServices();
+        updateTotal();
+
+        document.getElementById('bookingForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            const chosen = bookingServices.filter(s => qty[s.id] > 0);
+            if (!name || !phone) {
+                alert('Mohon isi nama dan nomor telepon.');
+                return;
+            }
+            if (chosen.length === 0) {
+                alert('Mohon pilih minimal 1 layanan.');
+                return;
+            }
+
+            const total = updateTotal();
+            let text = `Halo Kita Berkah Teknik, saya ingin booking layanan:\n\n`;
+            text += `Nama: ${name}\n`;
+            text += `No. HP: ${phone}\n`;
+            if (address) text += `Alamat: ${address}\n`;
+            text += `\nLayanan:\n`;
+            chosen.forEach(s => {
+                text += `- ${s.name} x${qty[s.id]} = ${formatRupiah(s.price * qty[s.id])}\n`;
+            });
+            text += `\nEstimasi Total: ${formatRupiah(total)}\n`;
+            if (message) text += `\nCatatan: ${message}\n`;
+
+            const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        });
+    </script>
+
+    <!-- ===== HAMBURGER TOGGLE ===== -->
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+
+        // Close menu on link click (mobile)
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+            });
+        });
+    </script>
+
+</body>
+</html>
