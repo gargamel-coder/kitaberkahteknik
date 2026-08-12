@@ -1227,36 +1227,33 @@
         </div>
     </footer>
 
-    <!-- ===== FIREBASE (simpan order ke Firestore) ===== -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-        import { initializeFirestore, collection, addDoc, serverTimestamp }
-          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-        const firebaseConfig = {
-          apiKey: "AIzaSyBtMn5fPXMtnWdwRzh_JyJmfYTcqWg7Bn4",
-          authDomain: "kitaberkahteknik-aa1f5.firebaseapp.com",
-          projectId: "kitaberkahteknik-aa1f5",
-          storageBucket: "kitaberkahteknik-aa1f5.firebasestorage.app",
-          messagingSenderId: "214709940522",
-          appId: "1:214709940522:web:8315a9bd8b5bcf50f76e53"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db  = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
-
-        // Simpan order ke Firestore collection 'orders'
+    <!-- ===== SIMPAN ORDER KE FIRESTORE (via REST, handal) ===== -->
+    <script>
+        // Menulis order langsung ke Firestore REST API — tidak butuh module SDK.
+        // ApiKey publik ini memang untuk akses web (aman sebatas rules yang sudah disetel).
         window.__saveOrder = async function(orderData) {
+            const body = {
+                fields: {
+                    customer_name: { stringValue: orderData.customer_name || '' },
+                    phone:         { stringValue: orderData.phone || '' },
+                    address:       { stringValue: orderData.address || '' },
+                    services_text: { stringValue: orderData.services_text || '' },
+                    service_type:  { stringValue: orderData.service_type || '' },
+                    detail:        { stringValue: orderData.detail || '' },
+                    scheduled_date:{ stringValue: orderData.scheduled_date || '' },
+                    total_estimate:{ integerValue: Number(orderData.total_estimate || 0) },
+                    task_status:   { stringValue: 'belum' }
+                }
+            };
+            const url = 'https://firestore.googleapis.com/v1/projects/kitaberkahteknik-aa1f5/databases/(default)/documents/orders?key=AIzaSyBtMn5fPXMtnWdwRzh_JyJmfYTcqWg7Bn4';
             try {
-                await addDoc(collection(db, 'orders'), {
-                    ...orderData,
-                    task_status: 'belum',
-                    assigned_to: null,
-                    created_at: serverTimestamp()
+                const resp = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
                 });
-                return true;
+                return resp.ok;
             } catch (e) {
-                console.error('Gagal simpan order:', e);
                 return false;
             }
         };
@@ -1358,6 +1355,7 @@
             // Simpan ke Firestore (collection 'orders') supaya muncul di admin
             if (window.__saveOrder) {
                 const servicesText = chosen.map(s => `- ${s.name} x${qty[s.id]} = ${formatRupiah(s.price * qty[s.id])}`).join('\n');
+                // Umpan balik: cek apakah order berhasil tersimpan
                 window.__saveOrder({
                     customer_name: name,
                     name: name,
@@ -1368,7 +1366,16 @@
                     detail: message,
                     scheduled_date: null,
                     total_estimate: total
+                }).then(saved => {
+                    console.log(saved ? '✅ Order tersimpan ke Firestore' : '❌ Gagal simpan order ke Firestore');
+                    if (saved) {
+                        alert('📋 Booking terkirim ke WhatsApp & tercatat di sistem.');
+                    } else {
+                        alert('⚠️ Terkirim ke WhatsApp, tapi gagal tercatat di sistem. Hubungi admin.');
+                    }
                 });
+            } else {
+                console.warn('__saveOrder tidak tersedia — order tidak disimpan ke Firestore');
             }
         });
     </script>
