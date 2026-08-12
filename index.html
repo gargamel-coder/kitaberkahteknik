@@ -1227,6 +1227,41 @@
         </div>
     </footer>
 
+    <!-- ===== FIREBASE (simpan order ke Firestore) ===== -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { initializeFirestore, collection, addDoc, serverTimestamp }
+          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBtMn5fPXMtnWdwRzh_JyJmfYTcqWg7Bn4",
+          authDomain: "kitaberkahteknik-aa1f5.firebaseapp.com",
+          projectId: "kitaberkahteknik-aa1f5",
+          storageBucket: "kitaberkahteknik-aa1f5.firebasestorage.app",
+          messagingSenderId: "214709940522",
+          appId: "1:214709940522:web:8315a9bd8b5bcf50f76e53"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db  = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
+
+        // Simpan order ke Firestore collection 'orders'
+        window.__saveOrder = async function(orderData) {
+            try {
+                await addDoc(collection(db, 'orders'), {
+                    ...orderData,
+                    task_status: 'belum',
+                    assigned_to: null,
+                    created_at: serverTimestamp()
+                });
+                return true;
+            } catch (e) {
+                console.error('Gagal simpan order:', e);
+                return false;
+            }
+        };
+    </script>
+
     <!-- ===== BOOKING FORM LOGIC ===== -->
     <script>
         const WA_NUMBER = '6281315604197';
@@ -1319,6 +1354,22 @@
 
             const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
             window.open(url, '_blank');
+
+            // Simpan ke Firestore (collection 'orders') supaya muncul di admin
+            if (window.__saveOrder) {
+                const servicesText = chosen.map(s => `- ${s.name} x${qty[s.id]} = ${formatRupiah(s.price * qty[s.id])}`).join('\n');
+                window.__saveOrder({
+                    customer_name: name,
+                    name: name,
+                    phone: phone,
+                    address: address,
+                    services_text: servicesText,
+                    service_type: chosen.map(s => s.name).join(', '),
+                    detail: message,
+                    scheduled_date: null,
+                    total_estimate: total
+                });
+            }
         });
     </script>
 
