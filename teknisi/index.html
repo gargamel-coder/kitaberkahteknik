@@ -12,12 +12,13 @@
   --primary:#0056a7; --primary-dark:#003b73; --primary-light:#e6f0fa;
   --accent:#ffb347; --gray-100:#f1f5f9; --gray-200:#e2e8f0;
   --gray-600:#4a5568; --gray-800:#1e293b; --white:#fff;
-  --red:#EF4444; --green:#16A34A; --shadow:0 12px 40px rgba(0,0,0,0.06);
+  --red:#EF4444; --green:#16A34A; --amber:#F59E0B; --shadow:0 12px 40px rgba(0,0,0,0.06);
   --radius:16px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;background:var(--gray-100);color:var(--gray-800);min-height:100vh;line-height:1.6;}
 a{text-decoration:none;color:inherit;}
+button{font-family:'Inter',sans-serif;}
 
 /* LOGIN */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,#f1f7fe 0%,#fff 100%);padding:20px;}
@@ -43,38 +44,85 @@ header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:1
 .hdr-user{font-size:0.82rem;color:var(--gray-600);}
 .logout-btn{padding:8px 18px;border-radius:100px;background:transparent;border:2px solid var(--gray-200);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;}
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
-.dash-body{padding:28px;max-width:900px;margin:0 auto;}
+.dash-body{padding:28px;max-width:920px;margin:0 auto;}
 .welcome{font-size:1.3rem;font-weight:700;margin-bottom:2px;}
 .welcome-date{font-size:0.85rem;color:var(--gray-600);margin-bottom:22px;}
 
-.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin-bottom:28px;}
-.stat-c{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 20px;}
-.stat-c .s-num{font-size:1.8rem;font-weight:800;color:var(--primary);}
-.stat-c .s-lbl{font-size:0.75rem;color:var(--gray-600);margin-top:2px;}
-.stat-c.green .s-num{color:var(--green);}
+/* DATE FILTER BAR */
+.date-bar{display:flex;align-items:center;gap:8px;margin-bottom:22px;background:var(--white);border:1px solid var(--gray-200);border-radius:16px;padding:12px 16px;flex-wrap:wrap;}
+.date-bar-lbl{font-size:0.78rem;font-weight:600;color:var(--gray-600);margin-right:2px;}
+.date-pill{padding:6px 16px;border-radius:100px;border:2px solid var(--gray-200);background:transparent;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;color:var(--gray-600);transition:all .15s;}
+.date-pill.act{border-color:var(--primary);background:var(--primary);color:#fff;}
+.date-input{padding:6px 12px;border:2px solid var(--gray-200);border-radius:100px;font-family:'Inter',sans-serif;font-size:0.8rem;color:var(--gray-800);background:var(--gray-100);outline:none;cursor:pointer;transition:border-color .2s;}
+.date-input:focus{border-color:var(--primary);}
 
-.filter-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
-.filter-pill{padding:7px 16px;border-radius:100px;border:2px solid var(--gray-200);background:transparent;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;color:var(--gray-600);transition:all .15s;}
-.filter-pill.act{border-color:var(--primary);background:var(--primary);color:#fff;}
-.custom-date{display:none;padding:8px 12px;border:2px solid var(--gray-200);border-radius:12px;font-family:'Inter',sans-serif;font-size:0.85rem;}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
+.stat-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;}
+.stat-card.today::before{background:var(--primary);}
+.stat-card.week::before{background:var(--amber);}
+.stat-card.month::before{background:var(--green);}
+.stat-num{font-size:1.9rem;font-weight:800;line-height:1;margin-bottom:4px;}
+.stat-card.today .stat-num{color:var(--primary);}
+.stat-card.week .stat-num{color:var(--amber);}
+.stat-card.month .stat-num{color:var(--green);}
+.stat-lbl{font-size:0.76rem;color:var(--gray-600);font-weight:600;}
+.stat-sub{font-size:0.71rem;color:var(--gray-600);margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;}
+.stat-sub span{display:inline-flex;align-items:center;gap:3px;}
 
-.task-list{display:flex;flex-direction:column;gap:14px;}
-.task-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:20px 22px;transition:box-shadow .2s;}
+/* PROGRESS BADGES */
+.prog-row{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+.prog-badge{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:14px;border:1px solid var(--gray-200);background:var(--white);}
+.prog-badge .pb-num{font-size:1.5rem;font-weight:800;}
+.prog-badge .pb-lbl{font-size:0.74rem;color:var(--gray-600);}
+.prog-badge.done .pb-num{color:var(--green);}
+.prog-badge.skip .pb-num{color:var(--red);}
+.prog-badge.pending .pb-num{color:var(--gray-600);}
+
+/* SECTION HEAD */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+.section-title{font-size:1rem;font-weight:700;color:var(--gray-800);}
+.task-count-badge{background:var(--primary-light);color:var(--primary);padding:4px 12px;border-radius:100px;font-size:0.75rem;font-weight:700;}
+
+/* TASK CARD */
+.task-list{display:flex;flex-direction:column;gap:12px;}
+.task-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:20px 22px;transition:box-shadow .2s;position:relative;overflow:hidden;}
+.task-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;}
+.task-card.status-belum::before{background:var(--gray-600);}
+.task-card.status-selesai::before{background:var(--green);}
+.task-card.status-skip::before{background:var(--red);}
 .task-card:hover{box-shadow:var(--shadow);}
 .task-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
 .task-id{font-family:monospace;font-size:0.85rem;font-weight:700;background:var(--primary-light);color:var(--primary);padding:3px 10px;border-radius:6px;}
-.task-time{font-size:0.75rem;color:var(--gray-600);}
-.task-body{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;font-size:0.85rem;color:var(--gray-600);margin-bottom:12px;}
+.task-status-badge{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:100px;font-size:0.72rem;font-weight:700;}
+.tsb-belum{background:#FEF9C3;color:#854D0E;}
+.tsb-selesai{background:#DCFCE7;color:#166534;}
+.tsb-skip{background:#FEE2E2;color:#991B1B;}
+.task-schedule{display:inline-flex;align-items:center;gap:6px;background:var(--primary-light);border:1px solid rgba(0,86,167,0.15);border-radius:10px;padding:6px 14px;font-size:0.8rem;font-weight:700;color:var(--primary);margin-bottom:12px;}
+.task-body{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;font-size:0.85rem;color:var(--gray-600);margin-bottom:10px;}
 .task-body b{color:var(--gray-800);}
+.task-body .full{grid-column:1/-1;}
 .task-services{font-size:0.82rem;color:var(--gray-800);background:var(--gray-100);padding:10px 14px;border-radius:10px;margin-bottom:12px;white-space:pre-line;}
+.quick-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.qa-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:10px;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:700;text-decoration:none;border:1.5px solid;transition:all .15s;cursor:pointer;}
+.qa-btn:active{transform:scale(0.96);}
+.qa-call{background:#EFF6FF;color:#1E40AF;border-color:#BFDBFE;}
+.qa-call:hover{background:#DBEAFE;}
+.qa-map{background:#FEF3C7;color:#92400E;border-color:#FDE68A;}
+.qa-map:hover{background:#FDE68A;}
+.qa-wa{background:#DCFCE7;color:#166534;border-color:#BBF7D0;}
+.qa-wa:hover{background:#BBF7D0;}
 .task-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-.status-badge{padding:6px 14px;border-radius:100px;font-size:0.75rem;font-weight:700;}
-.status-badge.belum{background:#FEF9C3;color:#854D0E;}
-.status-badge.selesai{background:#DCFCE7;color:#166534;}
+.task-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .btn-selesai{padding:10px 20px;border-radius:12px;background:var(--green);color:#fff;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:700;transition:all .2s;}
 .btn-selesai:hover{background:#15803D;transform:translateY(-1px);}
 .btn-selesai:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
-.empty-state{text-align:center;padding:50px 20px;color:var(--gray-600);font-size:0.88rem;}
+.btn-skip{padding:10px 18px;border-radius:12px;background:transparent;color:var(--red);border:2px solid var(--red);cursor:pointer;font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:700;transition:all .2s;}
+.btn-skip:hover{background:var(--red);color:#fff;}
+.btn-undo{padding:10px 18px;border-radius:12px;background:transparent;color:var(--gray-600);border:2px solid var(--gray-200);cursor:pointer;font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:600;transition:all .2s;}
+.btn-undo:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
+.empty-state{text-align:center;padding:50px 20px;color:var(--gray-600);font-size:0.88rem;background:var(--white);border:1px solid var(--gray-200);border-radius:20px;}
 .empty-ico{font-size:2.6rem;margin-bottom:8px;}
 
 #toast{position:fixed;bottom:28px;right:28px;background:var(--gray-800);color:#fff;padding:12px 22px;border-radius:14px;font-size:0.85rem;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,0.2);opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999;}
@@ -82,6 +130,17 @@ header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:1
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner-sm{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px;}
 .foot-copy{text-align:center;padding:20px 28px;font-size:0.76rem;color:var(--gray-600);border-top:1px solid var(--gray-200);background:var(--white);margin-top:30px;}
+
+@media(max-width:640px){
+  .dash-body{padding:16px;}
+  header{padding:12px 16px;}
+  .hdr-user{display:none;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .stats-grid .stat-card:last-child{grid-column:1/-1;}
+  .task-body{grid-template-columns:1fr;}
+  .task-body .full{grid-column:1;}
+  .date-bar{gap:7px;}
+}
 </style>
 </head>
 <body>
@@ -115,20 +174,58 @@ header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:1
     <div class="welcome" id="welcome-msg">Hai! 👋</div>
     <div class="welcome-date" id="welcome-date">—</div>
 
-    <div class="stat-row">
-      <div class="stat-c"><div class="s-num" id="stat-today">0</div><div class="s-lbl">Jadwal Hari Ini</div></div>
-      <div class="stat-c green"><div class="s-num" id="stat-today-done">0</div><div class="s-lbl">Selesai Hari Ini</div></div>
-      <div class="stat-c"><div class="s-num" id="stat-week">0</div><div class="s-lbl">Pekerjaan Minggu Ini</div></div>
-      <div class="stat-c"><div class="s-num" id="stat-total">0</div><div class="s-lbl">Total Pekerjaan</div></div>
+    <!-- DATE FILTER BAR -->
+    <div class="date-bar">
+      <span class="date-bar-lbl">📅 Lihat tugas:</span>
+      <button class="date-pill act" id="pill-today" data-f="today">Hari Ini</button>
+      <button class="date-pill" id="pill-week" data-f="week">Pekan Ini</button>
+      <button class="date-pill" id="pill-month" data-f="month">Bulan Ini</button>
+      <button class="date-pill" id="pill-all" data-f="all">Semua</button>
+      <input type="date" class="date-input" id="custom-date" title="Pilih tanggal tertentu">
     </div>
 
-    <div class="filter-row">
-      <button class="filter-pill act" data-f="today">Hari Ini</button>
-      <button class="filter-pill" data-f="week">Minggu Ini</button>
-      <button class="filter-pill" data-f="all">Semua</button>
-      <input type="date" class="custom-date" id="custom-date">
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card today">
+        <div class="stat-num" id="stat-today">0</div>
+        <div class="stat-lbl">Tugas Hari Ini</div>
+        <div class="stat-sub">
+          <span>✅ <b id="stat-today-done">0</b> selesai</span>
+          <span>⏳ <b id="stat-today-pending">0</b> belum</span>
+        </div>
+      </div>
+      <div class="stat-card week">
+        <div class="stat-num" id="stat-week">0</div>
+        <div class="stat-lbl">Total Pekan Ini</div>
+        <div class="stat-sub">
+          <span>✅ <b id="stat-week-done">0</b></span>
+          <span>⏭️ <b id="stat-week-skip">0</b></span>
+          <span>⏳ <b id="stat-week-pending">0</b></span>
+        </div>
+      </div>
+      <div class="stat-card month">
+        <div class="stat-num" id="stat-month">0</div>
+        <div class="stat-lbl">Total Bulan Ini</div>
+        <div class="stat-sub">
+          <span>✅ <b id="stat-month-done">0</b></span>
+          <span>⏭️ <b id="stat-month-skip">0</b></span>
+          <span>⏳ <b id="stat-month-pending">0</b></span>
+        </div>
+      </div>
     </div>
 
+    <!-- PROGRESS BADGES -->
+    <div class="prog-row">
+      <div class="prog-badge done"><div><div class="pb-num" id="prog-done">0</div><div class="pb-lbl">✅ Selesai</div></div></div>
+      <div class="prog-badge skip"><div><div class="pb-num" id="prog-skip">0</div><div class="pb-lbl">⏭️ Skip</div></div></div>
+      <div class="prog-badge pending"><div><div class="pb-num" id="prog-pending">0</div><div class="pb-lbl">⏳ Belum</div></div></div>
+    </div>
+
+    <!-- TASK LIST -->
+    <div class="section-head">
+      <div class="section-title" id="task-list-title">Daftar Tugas</div>
+      <span class="task-count-badge" id="task-count-badge">0 tugas</span>
+    </div>
     <div class="task-list" id="task-list"></div>
   </div>
 
@@ -143,7 +240,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { initializeFirestore, collection, query, where, onSnapshot, getDocs, doc, updateDoc, serverTimestamp }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ===== KONFIGURASI FIREBASE — ganti dengan proyek kita berkah teknik kamu =====
+// ===== KONFIGURASI FIREBASE — sama dengan proyek admin Kita Berkah Teknik =====
 const firebaseConfig = {
   apiKey: "AIzaSyBtMn5fPXMtnWdwRzh_JyJmfYTcqWg7Bn4",
   authDomain: "kitaberkahteknik-aa1f5.firebaseapp.com",
@@ -159,26 +256,35 @@ const db  = initializeFirestore(app, { experimentalAutoDetectLongPolling: true }
 // STATE
 let currentTech = null;
 let myOrders = [];
-let dateFilter = 'today';
+let dateFilter = 'today'; // today | week | month | all | custom
 let unsubOrders = null;
 
 // UTILS
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function getWeekBounds(){const n=new Date();n.setHours(0,0,0,0);const day=n.getDay();const mon=new Date(n);mon.setDate(n.getDate()-(day===0?6:day-1));const sun=new Date(mon);sun.setDate(mon.getDate()+6);return{start:mon,end:sun};}
 function getOrderDate(o){
   if(o.scheduled_date) return o.scheduled_date;
-  if(o.date){const p=new Date(o.date);if(!isNaN(p))return p.getFullYear()+'-'+String(p.getMonth()+1).padStart(2,'0')+'-'+String(p.getDate()).padStart(2,'0');}
   if(o.created_at&&o.created_at.seconds){const d=new Date(o.created_at.seconds*1000);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
   return null;
 }
-function fmtDate(o){const s=getOrderDate(o);if(!s)return'—';const d=new Date(s+'T00:00:00');const mons=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];return d.getDate()+' '+mons[d.getMonth()]+' '+d.getFullYear();}
 function filterByDate(orders){
   const today=todayStr();
   if(dateFilter==='today') return orders.filter(o=>getOrderDate(o)===today);
-  if(dateFilter==='week'){const{start,end}=getWeekBounds();return orders.filter(o=>{const d=getOrderDate(o);if(!d)return false;const dt=new Date(d);dt.setHours(0,0,0,0);return dt>=start&&dt<=end;});}
-  if(dateFilter==='custom'){const v=document.getElementById('custom-date').value;return orders.filter(o=>getOrderDate(o)===v);}
-  return orders;
+  if(dateFilter==='week'){
+    const{start,end}=getWeekBounds();
+    return orders.filter(o=>{const d=getOrderDate(o);if(!d)return false;const dt=new Date(d+'T00:00:00');return dt>=start&&dt<=end;});
+  }
+  if(dateFilter==='month'){
+    const now=new Date();
+    return orders.filter(o=>{const d=getOrderDate(o);if(!d)return false;const dt=new Date(d+'T00:00:00');return dt.getFullYear()===now.getFullYear()&&dt.getMonth()===now.getMonth();});
+  }
+  if(dateFilter==='custom'){
+    const v=document.getElementById('custom-date').value;
+    return orders.filter(o=>getOrderDate(o)===v);
+  }
+  return orders; // all
 }
 
 // AUTH
@@ -232,7 +338,7 @@ function listenMyOrders(){
     renderAll();
   },err=>{
     console.error(err);
-    document.getElementById('task-list').innerHTML='<div class="empty-state"><div class="empty-ico">⚠️</div><p style="color:#EF4444;font-weight:600">Gagal memuat tugas</p><p style="font-size:0.78rem;margin-top:6px">'+err.message+'</p></div>';
+    document.getElementById('task-list').innerHTML='<div class="empty-state"><div class="empty-ico">⚠️</div><p style="color:#EF4444;font-weight:600">Gagal memuat tugas</p><p style="font-size:0.78rem;margin-top:6px">'+esc(err.message)+'</p></div>';
   });
 }
 
@@ -241,58 +347,135 @@ function renderAll(){renderStats();renderTasks();}
 function renderStats(){
   const today=todayStr();const{start:wStart,end:wEnd}=getWeekBounds();const now=new Date();
   const inToday=myOrders.filter(o=>getOrderDate(o)===today);
-  const inWeek=myOrders.filter(o=>{const d=getOrderDate(o);if(!d)return false;const dt=new Date(d);dt.setHours(0,0,0,0);return dt>=wStart&&dt<=wEnd;});
+  const inWeek=myOrders.filter(o=>{const d=getOrderDate(o);if(!d)return false;const dt=new Date(d+'T00:00:00');return dt>=wStart&&dt<=wEnd;});
+  const inMonth=myOrders.filter(o=>{const d=getOrderDate(o);if(!d)return false;const dt=new Date(d+'T00:00:00');return dt.getFullYear()===now.getFullYear()&&dt.getMonth()===now.getMonth();});
   const count=(arr,st)=>arr.filter(o=>(o.task_status||'belum')===st).length;
+
   document.getElementById('stat-today').textContent=inToday.length;
   document.getElementById('stat-today-done').textContent=count(inToday,'selesai');
+  document.getElementById('stat-today-pending').textContent=count(inToday,'belum');
   document.getElementById('stat-week').textContent=inWeek.length;
-  document.getElementById('stat-total').textContent=myOrders.length;
+  document.getElementById('stat-week-done').textContent=count(inWeek,'selesai');
+  document.getElementById('stat-week-skip').textContent=count(inWeek,'skip');
+  document.getElementById('stat-week-pending').textContent=count(inWeek,'belum');
+  document.getElementById('stat-month').textContent=inMonth.length;
+  document.getElementById('stat-month-done').textContent=count(inMonth,'selesai');
+  document.getElementById('stat-month-skip').textContent=count(inMonth,'skip');
+  document.getElementById('stat-month-pending').textContent=count(inMonth,'belum');
 }
 function renderTasks(){
-  const list=document.getElementById('task-list');
   const filtered=filterByDate(myOrders);
-  if(filtered.length===0){
-    list.innerHTML='<div class="empty-state"><div class="empty-ico">🗓️</div><p>Tidak ada pekerjaan di filter ini.</p></div>';
+
+  const done=filtered.filter(o=>(o.task_status||'belum')==='selesai').length;
+  const skip=filtered.filter(o=>(o.task_status||'belum')==='skip').length;
+  const pending=filtered.filter(o=>(o.task_status||'belum')==='belum').length;
+  document.getElementById('prog-done').textContent=done;
+  document.getElementById('prog-skip').textContent=skip;
+  document.getElementById('prog-pending').textContent=pending;
+
+  const titles={today:'Tugas Hari Ini',week:'Tugas Pekan Ini',month:'Tugas Bulan Ini',all:'Semua Tugas',custom:'Tugas Tanggal Ini'};
+  document.getElementById('task-list-title').textContent=titles[dateFilter]||'Daftar Tugas';
+  document.getElementById('task-count-badge').textContent=filtered.length+' tugas';
+
+  const el=document.getElementById('task-list');
+  if(!filtered.length){
+    el.innerHTML=`<div class="empty-state"><div class="empty-ico">🎉</div><p>${dateFilter==='today'?'Tidak ada tugas hari ini. Istirahat dulu!':'Tidak ada tugas pada periode ini.'}</p></div>`;
     return;
   }
-  list.innerHTML=filtered.map(o=>{
-    const st=o.task_status||'belum';
-    const done=st==='selesai';
-    const services=o.services_text||o.services||o.detail||'—';
-    return `<div class="task-card">
-      <div class="task-head">
-        <span class="task-id">${o.code||o.id||'—'}</span>
-        <span class="task-time">${fmtDate(o)}</span>
-      </div>
-      <div class="task-body">
-        <div><b>Nama:</b> ${o.customer_name||o.name||'—'}</div>
-        <div><b>No. HP:</b> ${o.phone||'—'}</div>
-        <div><b>Alamat:</b> ${o.address||'—'}</div>
-        <div><b>Layanan:</b> ${o.service_type||'—'}</div>
-      </div>
-      <div class="task-services">${services}</div>
-      <div class="task-foot">
-        <span class="status-badge ${st}">${st==='selesai'?'✅ Selesai':'⏳ Belum selesai'}</span>
-        ${!done?`<button class="btn-selesai" data-id="${o.id}">Selesai</button>`:''}
-      </div>
-    </div>`;
-  }).join('');
 
-  list.querySelectorAll('.btn-selesai').forEach(b=>{
-    b.addEventListener('click',async()=>{
-      const id=b.dataset.id;
-      if(!confirm('Tandai pekerjaan ini selesai?'))return;
-      try{
-        await updateDoc(doc(db,'orders',id),{task_status:'selesai',completed_at:serverTimestamp(),completed_by:currentTech.tech_id});
-        showToast('✅ Pekerjaan ditandai selesai');
-      }catch(e){alert('Gagal update: '+e.message);}
-    });
+  // urutkan: belum dulu, lalu selesai, lalu skip
+  const order={belum:0,selesai:1,skip:2};
+  const sorted=[...filtered].sort((a,b)=>(order[a.task_status||'belum']||0)-(order[b.task_status||'belum']||0));
+
+  el.innerHTML=sorted.map(o=>buildTaskCard(o)).join('');
+
+  el.querySelectorAll('[data-status]').forEach(b=>{
+    b.addEventListener('click',()=>updateStatus(b.dataset.id,b.dataset.status));
   });
 }
+
+function buildTaskCard(o){
+  const status=o.task_status||'belum';
+  const safeId=o.id;
+  const code=o.code||o.id.slice(0,6).toUpperCase();
+
+  const statusBadge=status==='selesai'
+    ?'<span class="task-status-badge tsb-selesai">✅ Selesai</span>'
+    :status==='skip'
+    ?'<span class="task-status-badge tsb-skip">⏭️ Skip</span>'
+    :'<span class="task-status-badge tsb-belum">⏳ Belum Dikerjakan</span>';
+
+  let schedHtml='';
+  if(o.scheduled_date){
+    const sd=new Date(o.scheduled_date+'T00:00:00');
+    const days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    const mons=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    schedHtml=`<div class="task-schedule">📅 ${days[sd.getDay()]}, ${sd.getDate()} ${mons[sd.getMonth()]} ${sd.getFullYear()}</div>`;
+  }
+
+  const services=esc(o.services_text||o.services||o.detail||'');
+
+  const rawPhone=(o.phone||'').replace(/\D/g,'');
+  const callHtml=rawPhone
+    ?`<a class="qa-btn qa-call" href="tel:${rawPhone}">📞 Telepon</a>`
+    :'';
+  const waNum=rawPhone.replace(/^0/,'62');
+  const waHtml=rawPhone
+    ?`<a class="qa-btn qa-wa" href="https://wa.me/${waNum}" target="_blank" rel="noopener">💬 WhatsApp</a>`
+    :'';
+  const mapsQuery=encodeURIComponent(o.address||'');
+  const mapsHtml=o.address
+    ?`<a class="qa-btn qa-map" href="https://www.google.com/maps/search/?api=1&query=${mapsQuery}" target="_blank" rel="noopener">🗺️ Navigasi</a>`
+    :'';
+
+  let actionHtml='';
+  if(status==='belum'){
+    actionHtml=`<button class="btn-selesai" data-id="${safeId}" data-status="selesai">✅ Tandai Selesai</button>
+                <button class="btn-skip" data-id="${safeId}" data-status="skip">⏭️ Skip / Tidak Bisa</button>`;
+  }else{
+    actionHtml=`<button class="btn-undo" data-id="${safeId}" data-status="belum">↩️ Batalkan Status</button>`;
+  }
+
+  return `<div class="task-card status-${status}">
+    <div class="task-head">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span class="task-id">${esc(code)}</span>
+        ${statusBadge}
+      </div>
+    </div>
+    ${schedHtml}
+    <div class="task-body">
+      <div><b>${esc(o.customer_name||o.name||'—')}</b></div>
+      <div>${esc(o.phone||'—')}</div>
+      <div class="full" style="color:var(--gray-600)">📍 ${esc(o.address||'—')}</div>
+      <div class="full"><b>${esc(o.service_type||'Layanan belum diisi')}</b></div>
+    </div>
+    ${services?`<div class="task-services">${services}</div>`:''}
+    <div class="quick-actions">${callHtml}${waHtml}${mapsHtml}</div>
+    <div class="task-foot">
+      <div class="task-actions">${actionHtml}</div>
+    </div>
+  </div>`;
+}
+
+// UPDATE STATUS
+async function updateStatus(orderId,newStatus){
+  if(newStatus==='selesai'&&!confirm('Tandai pekerjaan ini selesai?'))return;
+  if(newStatus==='skip'&&!confirm('Skip pekerjaan ini? (misal tidak bisa dikerjakan hari ini)'))return;
+  try{
+    const payload={task_status:newStatus};
+    if(newStatus==='selesai'){payload.completed_at=serverTimestamp();payload.completed_by=currentTech.tech_id;}
+    await updateDoc(doc(db,'orders',orderId),payload);
+    const labels={selesai:'✅ Ditandai selesai!',skip:'⏭️ Pekerjaan di-skip.',belum:'↩️ Status dikembalikan.'};
+    showToast(labels[newStatus]||'Status diperbarui.');
+  }catch(e){showToast('Gagal: '+e.message);}
+}
+
+// DATE FILTER
 function setDateFilter(f){
   dateFilter=f;
-  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.toggle('act',p.dataset.f===f));
-  document.getElementById('custom-date').style.display=f==='custom'?'block':'none';
+  document.querySelectorAll('.date-pill').forEach(p=>p.classList.toggle('act',p.dataset.f===f));
+  if(f!=='custom') document.getElementById('custom-date').value='';
   renderTasks();
 }
 
@@ -300,8 +483,8 @@ function setDateFilter(f){
 document.getElementById('btn-login').addEventListener('click',doLogin);
 document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('btn-logout').addEventListener('click',doLogout);
-document.querySelectorAll('.filter-pill').forEach(p=>p.addEventListener('click',()=>setDateFilter(p.dataset.f)));
-document.getElementById('custom-date').addEventListener('change',()=>{dateFilter='custom';setDateFilter('custom');});
+document.querySelectorAll('.date-pill').forEach(p=>p.addEventListener('click',()=>setDateFilter(p.dataset.f)));
+document.getElementById('custom-date').addEventListener('change',()=>setDateFilter('custom'));
 
 // Auto-login jika ada sesi
 (function(){

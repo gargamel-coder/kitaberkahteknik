@@ -44,7 +44,7 @@ header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:1
 .hdr-user{font-size:0.82rem;color:var(--gray-600);}
 .logout-btn{padding:8px 18px;border-radius:100px;background:transparent;border:2px solid var(--gray-200);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;}
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
-.dash-body{padding:28px;max-width:1100px;margin:0 auto;}
+.dash-body{padding:28px;max-width:1180px;margin:0 auto;}
 
 .tabs{display:flex;gap:4px;margin-bottom:26px;background:rgba(0,0,0,0.04);padding:4px;border-radius:14px;width:fit-content;max-width:100%;flex-wrap:wrap;}
 .tab-btn{padding:9px 22px;border-radius:10px;border:none;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--gray-600);transition:all .2s;}
@@ -57,6 +57,7 @@ header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:1
 .stat-c .s-lbl{font-size:0.75rem;color:var(--gray-600);margin-top:2px;}
 .stat-c.green .s-num{color:var(--green);}
 .stat-c.amber .s-num{color:var(--amber);}
+.stat-c.red .s-num{color:var(--red);}
 
 /* FORM PANEL */
 .panels{display:grid;grid-template-columns:340px 1fr;gap:22px;align-items:start;}
@@ -101,6 +102,83 @@ tr:hover td{background:var(--primary-light);}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner-sm{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px;}
 .foot-copy{text-align:center;padding:20px 28px;font-size:0.76rem;color:var(--gray-600);border-top:1px solid var(--gray-200);background:var(--white);margin-top:30px;}
+
+/* FILTER PILLS */
+.filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
+.filter-pill{padding:7px 16px;border-radius:100px;border:2px solid var(--gray-200);background:var(--white);cursor:pointer;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;color:var(--gray-600);transition:all .15s;}
+.filter-pill.act{border-color:var(--primary);background:var(--primary);color:#fff;}
+
+/* CALENDAR */
+.cal-toggle-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:100px;border:2px solid var(--gray-200);background:var(--white);cursor:pointer;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;color:var(--gray-600);transition:all .15s;}
+.cal-toggle-btn:hover{border-color:var(--primary);color:var(--primary);}
+.cal-toggle-btn.act{border-color:var(--primary);background:var(--primary-light);color:var(--primary);}
+.export-cal-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:100px;border:2px solid var(--primary);background:var(--primary-light);cursor:pointer;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;color:var(--primary);transition:all .15s;margin-left:auto;}
+.export-cal-btn:hover{background:var(--primary);color:#fff;}
+.cal-container{margin-bottom:18px;display:none;}
+.cal-container.open{display:block;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cal-nav-btn{width:32px;height:32px;border-radius:10px;border:2px solid var(--gray-200);background:var(--white);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--gray-600);transition:all .15s;}
+.cal-nav-btn:hover{border-color:var(--primary);color:var(--primary);}
+.cal-month-label{font-size:0.85rem;font-weight:700;color:var(--gray-800);min-width:140px;text-align:center;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-dow{text-align:center;font-size:0.68rem;font-weight:700;color:var(--gray-600);text-transform:uppercase;padding:6px 0;}
+.cal-day{text-align:center;padding:8px 4px 10px;border-radius:10px;font-size:0.82rem;cursor:pointer;transition:all .15s;color:var(--gray-600);border:2px solid transparent;}
+.cal-day:hover{background:var(--primary-light);border-color:var(--primary);}
+.cal-day.today{font-weight:700;color:var(--primary);}
+.cal-day.selected{background:var(--primary);color:#fff !important;font-weight:700;border-color:var(--primary);}
+.cal-day.other-month{color:rgba(0,0,0,0.15);cursor:default;}
+.cal-day.other-month:hover{background:transparent;border-color:transparent;}
+.cal-day.has-orders-low{background:#FEF9C3;color:#854D0E;font-weight:700;}
+.cal-day.has-orders-high{background:#DBEAFE;color:#1E40AF;font-weight:700;}
+.cal-day.selected.has-orders-low,.cal-day.selected.has-orders-high{background:var(--primary);color:#fff !important;}
+.cal-legend{display:flex;align-items:center;gap:14px;margin-top:10px;font-size:0.72rem;color:var(--gray-600);flex-wrap:wrap;}
+.cal-legend-dot{width:12px;height:12px;border-radius:4px;display:inline-block;vertical-align:middle;margin-right:4px;}
+.cal-selected-info{margin-top:12px;padding:12px 14px;background:var(--primary-light);border-radius:14px;font-size:0.82rem;color:var(--gray-800);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.cal-clear{margin-left:auto;padding:5px 12px;border-radius:8px;border:2px solid var(--gray-200);background:var(--white);cursor:pointer;font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--gray-600);transition:all .15s;white-space:nowrap;}
+.cal-clear:hover{border-color:var(--red);color:var(--red);}
+
+/* ORDER CARDS */
+.order-card{background:var(--white);border:1px solid var(--gray-200);border-radius:18px;padding:18px 20px;margin-bottom:12px;transition:box-shadow .2s;}
+.order-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.07);}
+.order-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.order-time{font-size:0.74rem;color:var(--gray-600);}
+.order-body{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;font-size:0.83rem;color:var(--gray-600);margin-bottom:12px;}
+.order-body b{color:var(--gray-800);}
+.order-quickrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--gray-100);border-radius:12px;padding:10px 12px;margin-bottom:12px;}
+.qr-field label{display:block;font-size:0.68rem;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+.qr-field select,.qr-field input{width:100%;padding:7px 9px;border:1.5px solid var(--gray-200);border-radius:8px;font-family:'Inter',sans-serif;font-size:0.8rem;background:var(--white);color:var(--gray-800);outline:none;}
+.qr-field select:focus,.qr-field input:focus{border-color:var(--primary);}
+.order-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.order-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+/* Task status badges */
+.ts-belum{display:inline-flex;align-items:center;gap:4px;background:#FEF9C3;color:#854D0E;padding:5px 12px;border-radius:100px;font-size:0.72rem;font-weight:700;}
+.ts-selesai{display:inline-flex;align-items:center;gap:4px;background:#DCFCE7;color:#166534;padding:5px 12px;border-radius:100px;font-size:0.72rem;font-weight:700;}
+.ts-skip{display:inline-flex;align-items:center;gap:4px;background:#FEE2E2;color:#991B1B;padding:5px 12px;border-radius:100px;font-size:0.72rem;font-weight:700;}
+.quick-btn{padding:7px 13px;border-radius:9px;border:2px solid var(--gray-200);background:transparent;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--gray-600);transition:all .15s;}
+.quick-btn.done:hover{border-color:var(--green);color:#166534;background:#DCFCE7;}
+.quick-btn.skip:hover{border-color:var(--amber);color:#854D0E;background:#FEF9C3;}
+.quick-btn.undo:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
+.orders-empty{text-align:center;padding:48px 20px;color:var(--gray-600);font-size:0.88rem;}
+
+@media(max-width:800px){
+  .panels{grid-template-columns:1fr}
+  .stat-row{grid-template-columns:repeat(2,1fr)}
+  header{padding:12px 16px}
+  .hdr-user{display:none}
+  .dash-body{padding:16px}
+  .panel{padding:20px 16px}
+  .tabs{width:100%;overflow-x:auto;}
+  .order-body{grid-template-columns:1fr}
+  .order-quickrow{grid-template-columns:1fr}
+  .export-cal-btn{margin-left:0;}
+}
+@media(max-width:480px){
+  .stat-row{grid-template-columns:repeat(2,1fr);gap:10px}
+  .tabs{border-radius:12px}
+  .tab-btn{font-size:0.72rem;padding:7px 6px}
+  .order-card{padding:14px}
+  .cal-day{padding:6px 2px;font-size:0.75rem;}
+}
 </style>
 </head>
 <body>
@@ -140,15 +218,16 @@ tr:hover td{background:var(--primary-light);}
     <div class="tab-pane act" id="pane-orders">
       <div class="stat-row">
         <div class="stat-c"><div class="s-num" id="stat-total">0</div><div class="s-lbl">Total Pesanan</div></div>
-        <div class="stat-c amber"><div class="s-num" id="stat-pending">0</div><div class="s-lbl">Belum Selesai</div></div>
+        <div class="stat-c amber"><div class="s-num" id="stat-pending">0</div><div class="s-lbl">Belum Dikerjakan</div></div>
         <div class="stat-c green"><div class="s-num" id="stat-done">0</div><div class="s-lbl">Selesai</div></div>
+        <div class="stat-c red"><div class="s-num" id="stat-skip">0</div><div class="s-lbl">Di-skip</div></div>
         <div class="stat-c"><div class="s-num" id="stat-tech">0</div><div class="s-lbl">Teknisi Aktif</div></div>
       </div>
 
       <div class="panels">
         <!-- FORM -->
         <div class="panel">
-          <div class="panel-title">➕ Tambah Pesanan</div>
+          <div class="panel-title" id="orderFormTitle">➕ Tambah Pesanan</div>
           <form id="orderForm">
             <div class="fg"><label class="fl">Nama Pelanggan *</label><input class="fi" id="o-name" required></div>
             <div class="fg"><label class="fl">No. HP *</label><input class="fi" id="o-phone" required></div>
@@ -167,12 +246,37 @@ tr:hover td{background:var(--primary-light);}
         <!-- LIST -->
         <div class="panel" style="grid-column:auto;">
           <div class="panel-title">📋 Daftar Pesanan</div>
+
+          <div class="filter-row">
+            <button class="filter-pill act" data-f="all">Semua</button>
+            <button class="filter-pill" data-f="belum">⏳ Belum</button>
+            <button class="filter-pill" data-f="selesai">✅ Selesai</button>
+            <button class="filter-pill" data-f="skip">⏭️ Skip</button>
+            <button class="cal-toggle-btn" id="cal-toggle">📅 Filter Tanggal</button>
+            <button class="export-cal-btn" id="btn-export-cal" title="Export jadwal ke Kalender (iPhone/Google)">📤 Export ke Kalender</button>
+          </div>
+
+          <!-- CALENDAR (hidden by default) -->
+          <div class="cal-container" id="cal-panel">
+            <div class="cal-header">
+              <button class="cal-nav-btn" id="cal-prev">‹</button>
+              <span class="cal-month-label" id="cal-month-label"></span>
+              <button class="cal-nav-btn" id="cal-next">›</button>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+            <div class="cal-legend">
+              <span><span class="cal-legend-dot" style="background:#FEF9C3;border:1px solid #EAB308;"></span> &lt; 4 pesanan</span>
+              <span><span class="cal-legend-dot" style="background:#DBEAFE;border:1px solid #3B82F6;"></span> ≥ 4 pesanan</span>
+            </div>
+            <div class="cal-selected-info" id="cal-selected-info" style="display:none;">
+              <span id="cal-selected-text"></span>
+              <button class="cal-clear" id="cal-clear">✕ Reset</button>
+            </div>
+          </div>
+
           <input class="search-bar" id="search-orders" placeholder="🔍 Cari nama / no HP / kode...">
-          <div class="tbl-wrap">
-            <table>
-              <thead><tr><th>Kode</th><th>Pelanggan</th><th>Layanan</th><th>Tanggal</th><th>Teknisi</th><th>Status</th><th>Aksi</th></tr></thead>
-              <tbody id="orders-tbody"></tbody>
-            </table>
+          <div id="orders-list">
+            <div class="orders-empty"><div class="empty-ico">📋</div>Belum ada pesanan.</div>
           </div>
         </div>
       </div>
@@ -240,18 +344,26 @@ let allTechs = [];
 let unsubOrders = null;
 let unsubTechs = null;
 let editingOrderId = null;
+let taskFilter = 'all';        // all | belum | selesai | skip
+let selectedDate = null;       // yyyy-mm-dd, calendar filter
+let calMonth, calYear;
+(function(){ const n=new Date(); calMonth=n.getMonth(); calYear=n.getFullYear(); })();
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function fmtDate(o){
-  const s=o.scheduled_date||null;
-  let d;
-  if(s){d=new Date(s+'T00:00:00');}
-  else if(o.created_at&&o.created_at.seconds){d=new Date(o.created_at.seconds*1000);}
-  else return '—';
+function fmtCreated(o){
+  if(!(o.created_at&&o.created_at.seconds)) return '—';
+  const d=new Date(o.created_at.seconds*1000);
   const mons=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  return d.getDate()+' '+mons[d.getMonth()]+' '+d.getFullYear();
+  return d.getDate()+' '+mons[d.getMonth()]+' '+d.getFullYear()+', '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+function getOrderDateStr(o){
+  if(o.scheduled_date) return o.scheduled_date;
+  if(o.created_at&&o.created_at.seconds){
+    const d=new Date(o.created_at.seconds*1000);
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+  return null;
 }
 
 // AUTH
@@ -259,7 +371,6 @@ function doLogin(){
   const u=document.getElementById('l-user').value.trim();
   const p=document.getElementById('l-pass').value;
   const errEl=document.getElementById('l-err');
-  const btn=document.getElementById('btn-login');
   errEl.textContent='';
   if(!u||!p){errEl.textContent='Username dan password wajib diisi.';return;}
   if(u!==ADMIN_USER||p!==ADMIN_PASS){errEl.textContent='Username / password salah.';return;}
@@ -292,8 +403,9 @@ function listenOrders(){
   unsubOrders=onSnapshot(query(collection(db,'orders'),orderBy('created_at','desc')),snap=>{
     allOrders=snap.docs.map(d=>({id:d.id,...d.data()}));
     renderOrders();
+    renderCalendar();
   },err=>{
-    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="7" class="empty-state">⚠️ Gagal memuat: '+esc(err.message)+'</td></tr>';
+    document.getElementById('orders-list').innerHTML='<div class="orders-empty">⚠️ Gagal memuat: '+esc(err.message)+'</div>';
   });
 }
 function listenTechs(){
@@ -302,61 +414,120 @@ function listenTechs(){
     allTechs=snap.docs.map(d=>({id:d.id,...d.data()}));
     populateTechSelect();
     renderTechs();
-    renderOrdersStats();
+    renderOrders();
   });
 }
 
 // ORDERS RENDER
 function renderOrdersStats(){
   const active=allTechs.filter(t=>t.is_active!==false).length;
-  const pend=allOrders.filter(o=>(o.task_status||'belum')!=='selesai').length;
+  const belum=allOrders.filter(o=>(o.task_status||'belum')==='belum').length;
+  const selesai=allOrders.filter(o=>o.task_status==='selesai').length;
+  const skip=allOrders.filter(o=>o.task_status==='skip').length;
   document.getElementById('stat-total').textContent=allOrders.length;
-  document.getElementById('stat-pending').textContent=pend;
-  document.getElementById('stat-done').textContent=allOrders.length-pend;
+  document.getElementById('stat-pending').textContent=belum;
+  document.getElementById('stat-done').textContent=selesai;
+  document.getElementById('stat-skip').textContent=skip;
   document.getElementById('stat-tech').textContent=active;
 }
 function techName(id){
   const t=allTechs.find(x=>x.tech_id===id);
   return t?t.name:(id||'—');
 }
+function techOptionsHtml(selected){
+  const active=allTechs.filter(t=>t.is_active!==false);
+  return '<option value="">— belum di-assign —</option>'+active.map(t=>
+    `<option value="${esc(t.tech_id)}" ${t.tech_id===selected?'selected':''}>${esc(t.name)} (${esc(t.tech_id)})</option>`
+  ).join('');
+}
+function statusBadge(st){
+  if(st==='selesai') return '<span class="ts-selesai">✅ Selesai</span>';
+  if(st==='skip') return '<span class="ts-skip">⏭️ Skip</span>';
+  return '<span class="ts-belum">⏳ Belum</span>';
+}
+function quickActionsHtml(o,st){
+  if(st==='belum'){
+    return `<button class="quick-btn done" data-act="done" data-id="${o.id}">✅ Selesai</button>
+            <button class="quick-btn skip" data-act="skip" data-id="${o.id}">⏭️ Skip</button>`;
+  }
+  return `<button class="quick-btn undo" data-act="undo" data-id="${o.id}">↩️ Batalkan</button>`;
+}
+
 function renderOrders(){
   renderOrdersStats();
   const q=document.getElementById('search-orders').value.toLowerCase();
   let list=allOrders;
+
+  if(taskFilter!=='all'){
+    list=list.filter(o=>(o.task_status||'belum')===taskFilter);
+  }
+  if(selectedDate){
+    list=list.filter(o=>getOrderDateStr(o)===selectedDate);
+  }
   if(q){
     list=list.filter(o=>{
       const hay=(o.customer_name||o.name||'')+' '+(o.phone||'')+' '+(o.code||o.id||'')+' '+techName(o.assigned_to);
       return hay.toLowerCase().includes(q);
     });
   }
-  const tb=document.getElementById('orders-tbody');
-  if(list.length===0){tb.innerHTML='<tr><td colspan="7" class="empty-state"><div class="empty-ico">📋</div>Tidak ada pesanan.</td></tr>';return;}
-  tb.innerHTML=list.map(o=>{
+
+  const el=document.getElementById('orders-list');
+  if(list.length===0){
+    const dateInfo=selectedDate?` pada ${new Date(selectedDate+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}`:'';
+    el.innerHTML=`<div class="orders-empty"><div class="empty-ico">📋</div>Tidak ada pesanan${taskFilter!=='all'?' dengan status ini':''}${dateInfo}.</div>`;
+    return;
+  }
+
+  el.innerHTML=list.map(o=>{
     const st=o.task_status||'belum';
-    const done=st==='selesai';
-    const badge=done?'<span class="badge badge-green">✅ Selesai</span>':'<span class="badge badge-amber">⏳ Belum</span>';
-    return `<tr>
-      <td><span class="code-badge">${esc(o.code||o.id||'—')}</span></td>
-      <td><b>${esc(o.customer_name||o.name||'—')}</b><br><span style="font-size:0.75rem;color:var(--gray-600)">${esc(o.phone||'')}</span></td>
-      <td>${esc(o.service_type||'—')}</td>
-      <td>${fmtDate(o)}</td>
-      <td>${esc(techName(o.assigned_to))}</td>
-      <td>${badge}</td>
-      <td>
-        ${!done?`<button class="act-btn tog" data-act="done" data-id="${o.id}">✅</button>`:''}
-        <button class="act-btn" data-act="edit" data-id="${o.id}">✏️</button>
-        <button class="act-btn del" data-act="del" data-id="${o.id}">🗑️</button>
-      </td>
-    </tr>`;
+    return `<div class="order-card" id="ocard-${o.id}">
+      <div class="order-head">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span class="code-badge">${esc(o.code||o.id.slice(0,6).toUpperCase())}</span>
+          ${statusBadge(st)}
+        </div>
+        <span class="order-time">🕐 ${fmtCreated(o)}</span>
+      </div>
+      <div class="order-body">
+        <div><b>${esc(o.customer_name||o.name||'—')}</b></div>
+        <div>${esc(o.phone||'—')}</div>
+        <div style="grid-column:1/-1;color:var(--gray-600)">${esc(o.address||'—')}</div>
+        <div style="grid-column:1/-1"><b>${esc(o.service_type||'Layanan belum diisi')}</b></div>
+        ${o.services_text||o.detail?`<div style="grid-column:1/-1;color:var(--gray-600)">📝 ${esc(o.services_text||o.detail)}</div>`:''}
+      </div>
+      <div class="order-quickrow">
+        <div class="qr-field">
+          <label>📅 Tanggal Jadwal</label>
+          <input type="date" value="${esc(o.scheduled_date||'')}" data-qdate="${o.id}">
+        </div>
+        <div class="qr-field">
+          <label>👷 Assign Teknisi</label>
+          <select data-qassign="${o.id}">${techOptionsHtml(o.assigned_to)}</select>
+        </div>
+      </div>
+      <div class="order-foot">
+        <div class="order-actions">
+          ${quickActionsHtml(o,st)}
+        </div>
+        <div class="order-actions">
+          <button class="act-btn" data-act="edit" data-id="${o.id}">✏️ Edit</button>
+          <button class="act-btn del" data-act="del" data-id="${o.id}">🗑️ Hapus</button>
+        </div>
+      </div>
+    </div>`;
   }).join('');
 
-  tb.querySelectorAll('button').forEach(b=>{
+  // Quick action buttons
+  el.querySelectorAll('.quick-btn, .act-btn').forEach(b=>{
     b.addEventListener('click',async()=>{
       const id=b.dataset.id;
       const act=b.dataset.act;
       if(act==='done'){
-        if(!confirm('Tandai pesanan selesai?'))return;
         try{await updateDoc(doc(db,'orders',id),{task_status:'selesai',completed_at:serverTimestamp()});showToast('✅ Ditandai selesai');}catch(e){alert('Gagal: '+e.message);}
+      }else if(act==='skip'){
+        try{await updateDoc(doc(db,'orders',id),{task_status:'skip'});showToast('⏭️ Pesanan di-skip');}catch(e){alert('Gagal: '+e.message);}
+      }else if(act==='undo'){
+        try{await updateDoc(doc(db,'orders',id),{task_status:'belum'});showToast('↩️ Status dikembalikan ke Belum');}catch(e){alert('Gagal: '+e.message);}
       }else if(act==='edit'){
         const o=allOrders.find(x=>x.id===id);if(!o)return;
         editingOrderId=id;
@@ -367,7 +538,7 @@ function renderOrders(){
         document.getElementById('o-detail').value=o.services_text||o.services||o.detail||'';
         document.getElementById('o-date').value=o.scheduled_date||'';
         document.getElementById('o-assign').value=o.assigned_to||'';
-        document.querySelector('#pane-orders .panel .panel-title').textContent='✏️ Edit Pesanan';
+        document.getElementById('orderFormTitle').textContent='✏️ Edit Pesanan';
         document.querySelector('#orderForm .create-btn').innerHTML='Update Pesanan';
         document.getElementById('orderMsg').textContent='';
         document.getElementById('orderMsg').classList.remove('ok','err');
@@ -376,6 +547,21 @@ function renderOrders(){
         if(!confirm('Hapus pesanan ini permanen?'))return;
         try{await deleteDoc(doc(db,'orders',id));showToast('🗑️ Pesanan dihapus');}catch(e){alert('Gagal: '+e.message);}
       }
+    });
+  });
+
+  // Quick inline date change
+  el.querySelectorAll('[data-qdate]').forEach(inp=>{
+    inp.addEventListener('change',async()=>{
+      const id=inp.dataset.qdate;
+      try{await updateDoc(doc(db,'orders',id),{scheduled_date:inp.value||null});showToast('📅 Jadwal diperbarui');}catch(e){alert('Gagal: '+e.message);}
+    });
+  });
+  // Quick inline assign change
+  el.querySelectorAll('[data-qassign]').forEach(sel=>{
+    sel.addEventListener('change',async()=>{
+      const id=sel.dataset.qassign;
+      try{await updateDoc(doc(db,'orders',id),{assigned_to:sel.value||null});showToast(sel.value?'👷 Teknisi di-assign':'👷 Assignment dihapus');}catch(e){alert('Gagal: '+e.message);}
     });
   });
 }
@@ -417,6 +603,140 @@ function renderTechs(){
   });
 }
 
+// CALENDAR
+function renderCalendar(){
+  const grid=document.getElementById('cal-grid');
+  const label=document.getElementById('cal-month-label');
+  const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const dows=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  label.textContent=months[calMonth]+' '+calYear;
+
+  const counts={};
+  allOrders.forEach(o=>{
+    const d=getOrderDateStr(o);
+    if(d) counts[d]=(counts[d]||0)+1;
+  });
+
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const daysInPrev=new Date(calYear,calMonth,0).getDate();
+  const today=new Date();
+  const todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+
+  let html=dows.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=firstDay-1;i>=0;i--){ html+=`<div class="cal-day other-month">${daysInPrev-i}</div>`; }
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const isToday=dateStr===todayStr;
+    const isSelected=selectedDate===dateStr;
+    const count=counts[dateStr]||0;
+    const colorClass=count>0?(count>=4?' has-orders-high':' has-orders-low'):'';
+    html+=`<div class="cal-day${isToday?' today':''}${isSelected?' selected':''}${colorClass}" data-date="${dateStr}">${d}</div>`;
+  }
+  const totalCells=firstDay+daysInMonth;
+  const remaining=totalCells%7===0?0:7-(totalCells%7);
+  for(let i=1;i<=remaining;i++){ html+=`<div class="cal-day other-month">${i}</div>`; }
+
+  grid.innerHTML=html;
+  grid.querySelectorAll('.cal-day[data-date]').forEach(el=>{
+    el.addEventListener('click',()=>selectCalDate(el.dataset.date));
+  });
+}
+function selectCalDate(dateStr){
+  const toggleBtn=document.getElementById('cal-toggle');
+  if(selectedDate===dateStr){
+    selectedDate=null;
+    document.getElementById('cal-selected-info').style.display='none';
+    toggleBtn.innerHTML='📅 Filter Tanggal';
+    toggleBtn.classList.remove('act');
+  }else{
+    selectedDate=dateStr;
+    const d=new Date(dateStr+'T00:00:00');
+    document.getElementById('cal-selected-text').textContent='📅 '+d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    document.getElementById('cal-selected-info').style.display='flex';
+    toggleBtn.innerHTML='📅 '+d.toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+    toggleBtn.classList.add('act');
+  }
+  renderCalendar();
+  renderOrders();
+}
+document.getElementById('cal-toggle').addEventListener('click',()=>{
+  const panel=document.getElementById('cal-panel');
+  const btn=document.getElementById('cal-toggle');
+  const isOpen=panel.classList.toggle('open');
+  if(!selectedDate) btn.classList.toggle('act',isOpen);
+  if(isOpen) renderCalendar();
+});
+document.getElementById('cal-prev').addEventListener('click',()=>{
+  calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar();
+});
+document.getElementById('cal-next').addEventListener('click',()=>{
+  calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar();
+});
+document.getElementById('cal-clear').addEventListener('click',()=>{
+  selectedDate=null;
+  document.getElementById('cal-selected-info').style.display='none';
+  document.getElementById('cal-toggle').classList.remove('act');
+  document.getElementById('cal-toggle').innerHTML='📅 Filter Tanggal';
+  document.getElementById('cal-panel').classList.remove('open');
+  renderOrders();
+});
+
+// EXPORT KE KALENDER (.ics)
+document.getElementById('btn-export-cal').addEventListener('click',()=>{
+  let list=allOrders.filter(o=>o.scheduled_date);
+  if(selectedDate) list=list.filter(o=>o.scheduled_date===selectedDate);
+  if(!list.length){ showToast(selectedDate?'Tidak ada pesanan berjadwal di tanggal ini.':'Belum ada pesanan yang punya tanggal jadwal.'); return; }
+
+  function padZ(n){return String(n).padStart(2,'0');}
+  function escICS(s){return (s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');}
+
+  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Kita Berkah Teknik//Admin Dashboard//ID','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Kita Berkah Teknik — Jadwal Servis','X-WR-TIMEZONE:Asia/Jakarta'];
+  list.forEach(o=>{
+    const [y,mo,d]=o.scheduled_date.split('-').map(Number);
+    const dtStart=`${y}${padZ(mo)}${padZ(d)}T090000`;
+    const dtEnd=`${y}${padZ(mo)}${padZ(d)}T110000`;
+    const summary=escICS(`Servis — ${o.customer_name||o.name||'Pelanggan'} (${o.code||o.id.slice(0,6).toUpperCase()})`);
+    const desc=escICS([
+      `Pelanggan: ${o.customer_name||o.name||'—'}`,
+      `No. HP: ${o.phone||'—'}`,
+      `Layanan: ${o.service_type||'—'}`,
+      o.services_text||o.detail?`Detail: ${o.services_text||o.detail}`:'',
+      `Teknisi: ${techName(o.assigned_to)}`
+    ].filter(Boolean).join('\n'));
+    const location=escICS(o.address||'');
+    lines.push('BEGIN:VEVENT');
+    lines.push(`UID:${o.id}@kitaberkahteknik.app`);
+    lines.push(`DTSTART;TZID=Asia/Jakarta:${dtStart}`);
+    lines.push(`DTEND;TZID=Asia/Jakarta:${dtEnd}`);
+    lines.push(`SUMMARY:${summary}`);
+    lines.push(`DESCRIPTION:${desc}`);
+    if(location) lines.push(`LOCATION:${location}`);
+    lines.push('STATUS:CONFIRMED');
+    lines.push('END:VEVENT');
+  });
+  lines.push('END:VCALENDAR');
+
+  const icsContent=lines.join('\r\n');
+  const blob=new Blob([icsContent],{type:'text/calendar;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const label=selectedDate||new Date().toISOString().split('T')[0];
+  a.href=url; a.download=`kbt-jadwal-servis-${label}.ics`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast(`✅ ${list.length} jadwal diexport ke kalender!`);
+});
+
+// FILTER PILLS
+document.querySelectorAll('.filter-pill').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    taskFilter=btn.dataset.f;
+    document.querySelectorAll('.filter-pill').forEach(b=>b.classList.toggle('act',b===btn));
+    renderOrders();
+  });
+});
+
 // FORMS
 document.getElementById('orderForm').addEventListener('submit',async(e)=>{
   e.preventDefault();
@@ -436,18 +756,17 @@ document.getElementById('orderForm').addEventListener('submit',async(e)=>{
     services_text:document.getElementById('o-detail').value.trim()||null,
     detail:document.getElementById('o-detail').value.trim()||null,
     scheduled_date:document.getElementById('o-date').value||null,
-    assigned_to:document.getElementById('o-assign').value||null,
-    task_status:'belum'
+    assigned_to:document.getElementById('o-assign').value||null
   };
   try{
     if(editingOrderId){
       await updateDoc(doc(db,'orders',editingOrderId),data);
       msgEl.textContent='✅ Pesanan diperbarui';msgEl.classList.add('ok');
       editingOrderId=null;
-      document.querySelector('#pane-orders .panel .panel-title').textContent='➕ Tambah Pesanan';
+      document.getElementById('orderFormTitle').textContent='➕ Tambah Pesanan';
       document.querySelector('#orderForm .create-btn').innerHTML='Simpan Pesanan';
     }else{
-      await addDoc(collection(db,'orders'),{...data,created_at:serverTimestamp()});
+      await addDoc(collection(db,'orders'),{...data,task_status:'belum',created_at:serverTimestamp()});
       msgEl.textContent='✅ Pesanan disimpan';msgEl.classList.add('ok');
     }
     document.getElementById('orderForm').reset();
@@ -467,7 +786,6 @@ document.getElementById('techForm').addEventListener('submit',async(e)=>{
   const msgEl=document.getElementById('techMsg');
   msgEl.classList.remove('ok','err');
   if(!name||!id||!pass){msgEl.textContent='Nama, ID, dan password wajib diisi.';msgEl.classList.add('err');btn.disabled=false;return;}
-  // cek duplikat ID
   const exists=allTechs.find(t=>t.tech_id===id);
   if(exists){msgEl.textContent='ID sudah dipakai.';msgEl.classList.add('err');btn.disabled=false;return;}
   try{
