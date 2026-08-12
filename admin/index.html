@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kita Berkah Teknik — Admin Dashboard</title>
+<meta name="theme-color" content="#0056a7">
+<link rel="icon" type="image/png" href="../assets/logo-icon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#0056a7; --primary-dark:#003b73; --primary-light:#e6f0fa;
+  --accent:#ffb347; --gray-100:#f1f5f9; --gray-200:#e2e8f0;
+  --gray-600:#4a5568; --gray-800:#1e293b; --white:#fff;
+  --red:#EF4444; --green:#16A34A; --amber:#F59E0B; --shadow:0 12px 40px rgba(0,0,0,0.06);
+  --radius:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--gray-100);color:var(--gray-800);min-height:100vh;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+button{font-family:'Inter',sans-serif;}
+
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,#f1f7fe 0%,#fff 100%);padding:20px;}
+.login-card{background:var(--white);border-radius:24px;padding:44px 36px;box-shadow:var(--shadow);width:100%;max-width:400px;text-align:center;}
+.login-logo{font-size:1.7rem;font-weight:800;color:var(--primary);margin-bottom:4px;}
+.login-logo span{color:var(--gray-800);}
+.login-badge{display:inline-block;background:var(--primary-light);color:var(--primary);font-weight:600;padding:4px 14px;border-radius:100px;font-size:0.75rem;margin-bottom:8px;letter-spacing:0.3px;}
+.login-sub{font-size:0.85rem;color:var(--gray-600);margin-bottom:28px;}
+.l-label{font-size:0.8rem;font-weight:600;display:block;text-align:left;margin-bottom:6px;}
+.l-input{width:100%;padding:13px 14px;border:2px solid var(--gray-200);border-radius:14px;font-family:'Inter',sans-serif;font-size:0.92rem;background:var(--gray-100);outline:none;transition:all .2s;margin-bottom:16px;}
+.l-input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 4px rgba(0,86,167,0.10);}
+.l-btn{width:100%;padding:14px;border-radius:14px;background:var(--primary);color:#fff;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.95rem;font-weight:700;transition:all .2s;}
+.l-btn:hover{background:var(--primary-dark);}
+.l-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.l-err{font-size:0.82rem;color:var(--red);margin-top:12px;min-height:18px;}
+
+/* DASHBOARD */
+#dashboard{display:none;}
+header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:15px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.hdr-logo{font-size:1.25rem;font-weight:800;color:var(--primary);}
+.hdr-logo span{color:var(--gray-800);}
+.hdr-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.hdr-user{font-size:0.82rem;color:var(--gray-600);}
+.logout-btn{padding:8px 18px;border-radius:100px;background:transparent;border:2px solid var(--gray-200);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
+.dash-body{padding:28px;max-width:1100px;margin:0 auto;}
+
+.tabs{display:flex;gap:4px;margin-bottom:26px;background:rgba(0,0,0,0.04);padding:4px;border-radius:14px;width:fit-content;max-width:100%;flex-wrap:wrap;}
+.tab-btn{padding:9px 22px;border-radius:10px;border:none;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--gray-600);transition:all .2s;}
+.tab-btn.act{background:var(--white);color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.tab-pane{display:none;}.tab-pane.act{display:block;}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin-bottom:26px;}
+.stat-c{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 20px;}
+.stat-c .s-num{font-size:1.8rem;font-weight:800;color:var(--primary);}
+.stat-c .s-lbl{font-size:0.75rem;color:var(--gray-600);margin-top:2px;}
+.stat-c.green .s-num{color:var(--green);}
+.stat-c.amber .s-num{color:var(--amber);}
+
+/* FORM PANEL */
+.panels{display:grid;grid-template-columns:340px 1fr;gap:22px;align-items:start;}
+.panel{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:24px;}
+.panel-title{font-size:0.95rem;font-weight:700;margin-bottom:18px;}
+.fg{margin-bottom:14px;}
+.fl{font-size:0.76rem;font-weight:600;display:block;margin-bottom:5px;color:var(--gray-600);}
+.fi,.fs{width:100%;padding:11px 13px;border:2px solid var(--gray-200);border-radius:12px;font-family:'Inter',sans-serif;font-size:0.87rem;background:var(--gray-100);outline:none;transition:border-color .2s;color:var(--gray-800);}
+.fi:focus,.fs:focus{border-color:var(--primary);background:#fff;}
+textarea.fi{resize:vertical;min-height:70px;}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.create-btn{width:100%;padding:13px;border-radius:13px;background:var(--primary);color:#fff;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;transition:all .2s;margin-top:4px;}
+.create-btn:hover{background:var(--primary-dark);}
+.create-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.form-msg{font-size:0.8rem;margin-top:10px;min-height:18px;text-align:center;font-weight:600;}
+.form-msg.ok{color:var(--green);}
+.form-msg.err{color:var(--red);}
+
+/* TABLES */
+.search-bar{width:100%;padding:11px 14px;border:2px solid var(--gray-200);border-radius:12px;font-family:'Inter',sans-serif;font-size:0.87rem;background:var(--white);outline:none;transition:border-color .2s;margin-bottom:16px;}
+.search-bar:focus{border-color:var(--primary);}
+.tbl-wrap{overflow-x:auto;background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:8px;}
+table{width:100%;border-collapse:collapse;font-size:0.83rem;}
+th{text-align:left;padding:12px 14px;font-size:0.72rem;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--gray-200);}
+td{padding:13px 14px;border-bottom:1px solid var(--gray-200);color:var(--gray-800);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--primary-light);}
+.code-badge{font-family:monospace;font-size:0.8rem;font-weight:700;background:var(--primary-light);color:var(--primary);padding:3px 10px;border-radius:6px;}
+.badge{display:inline-block;padding:4px 12px;border-radius:100px;font-size:0.72rem;font-weight:700;}
+.badge-green{background:#DCFCE7;color:#166534;}
+.badge-amber{background:#FEF9C3;color:#854D0E;}
+.badge-red{background:#FEE2E2;color:#991B1B;}
+.act-btn{padding:6px 12px;border-radius:9px;border:2px solid var(--gray-200);background:transparent;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--gray-600);transition:all .15s;margin-right:4px;}
+.act-btn:hover{border-color:var(--primary);color:var(--primary);}
+.act-btn.del:hover{border-color:var(--red);color:var(--red);background:#FEE2E2;}
+.act-btn.tog:hover{border-color:var(--green);color:#166534;background:#DCFCE7;}
+.empty-state{text-align:center;padding:46px 20px;color:var(--gray-600);font-size:0.88rem;}
+.empty-ico{font-size:2.4rem;margin-bottom:6px;}
+
+#toast{position:fixed;bottom:28px;right:28px;background:var(--gray-800);color:#fff;padding:12px 22px;border-radius:14px;font-size:0.85rem;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,0.2);opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999;}
+#toast.show{opacity:1;transform:translateY(0);}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-sm{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px;}
+.foot-copy{text-align:center;padding:20px 28px;font-size:0.76rem;color:var(--gray-600);border-top:1px solid var(--gray-200);background:var(--white);margin-top:30px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-badge">ADMIN DASHBOARD</div>
+    <div class="login-logo">Kita Berkah <span>Teknik</span></div>
+    <p class="login-sub">Masuk dengan username &amp; password admin</p>
+    <label class="l-label">Username</label>
+    <input class="l-input" id="l-user" placeholder="admin">
+    <label class="l-label">Password</label>
+    <input class="l-input" id="l-pass" type="password" placeholder="Password admin">
+    <button class="l-btn" id="btn-login">Masuk</button>
+    <div class="l-err" id="l-err"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <header>
+    <div class="hdr-logo">Kita Berkah <span>Teknik</span> <small style="font-weight:600;color:var(--gray-600);font-size:0.8rem;">Admin</small></div>
+    <div class="hdr-right">
+      <span class="hdr-user" id="hdr-name">—</span>
+      <button class="logout-btn" id="btn-logout">Keluar</button>
+    </div>
+  </header>
+
+  <div class="dash-body">
+    <div class="tabs">
+      <button class="tab-btn act" data-tab="orders">📋 Pesanan</button>
+      <button class="tab-btn" data-tab="technicians">👷 Teknisi</button>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="tab-pane act" id="pane-orders">
+      <div class="stat-row">
+        <div class="stat-c"><div class="s-num" id="stat-total">0</div><div class="s-lbl">Total Pesanan</div></div>
+        <div class="stat-c amber"><div class="s-num" id="stat-pending">0</div><div class="s-lbl">Belum Selesai</div></div>
+        <div class="stat-c green"><div class="s-num" id="stat-done">0</div><div class="s-lbl">Selesai</div></div>
+        <div class="stat-c"><div class="s-num" id="stat-tech">0</div><div class="s-lbl">Teknisi Aktif</div></div>
+      </div>
+
+      <div class="panels">
+        <!-- FORM -->
+        <div class="panel">
+          <div class="panel-title">➕ Tambah Pesanan</div>
+          <form id="orderForm">
+            <div class="fg"><label class="fl">Nama Pelanggan *</label><input class="fi" id="o-name" required></div>
+            <div class="fg"><label class="fl">No. HP *</label><input class="fi" id="o-phone" required></div>
+            <div class="fg"><label class="fl">Alamat</label><input class="fi" id="o-address"></div>
+            <div class="fg"><label class="fl">Layanan (nama)</label><input class="fi" id="o-service" placeholder="Contoh: Cuci AC 1 PK"></div>
+            <div class="fg"><label class="fl">Detail / catatan</label><textarea class="fi" id="o-detail" placeholder="Ringkasan layanan, jumlah unit, dll."></textarea></div>
+            <div class="fr2">
+              <div class="fg"><label class="fl">Tanggal Jadwal</label><input class="fi" id="o-date" type="date"></div>
+              <div class="fg"><label class="fl">Assign Teknisi</label><select class="fs" id="o-assign"><option value="">— pilih —</option></select></div>
+            </div>
+            <button type="submit" class="create-btn">Simpan Pesanan</button>
+            <div class="form-msg" id="orderMsg"></div>
+          </form>
+        </div>
+
+        <!-- LIST -->
+        <div class="panel" style="grid-column:auto;">
+          <div class="panel-title">📋 Daftar Pesanan</div>
+          <input class="search-bar" id="search-orders" placeholder="🔍 Cari nama / no HP / kode...">
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Kode</th><th>Pelanggan</th><th>Layanan</th><th>Tanggal</th><th>Teknisi</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="orders-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TECHNICIANS -->
+    <div class="tab-pane" id="pane-technicians">
+      <div class="panels">
+        <div class="panel">
+          <div class="panel-title">➕ Tambah Teknisi</div>
+          <form id="techForm">
+            <div class="fg"><label class="fl">Nama Teknisi *</label><input class="fi" id="t-name" required></div>
+            <div class="fg"><label class="fl">No. HP</label><input class="fi" id="t-phone"></div>
+            <div class="fg"><label class="fl">ID Teknisi *</label><input class="fi" id="t-id" placeholder="Contoh: T001" required></div>
+            <div class="fg"><label class="fl">Password *</label><input class="fi" id="t-pass" required></div>
+            <button type="submit" class="create-btn">Simpan Teknisi</button>
+            <div class="form-msg" id="techMsg"></div>
+          </form>
+        </div>
+        <div class="panel">
+          <div class="panel-title">👷 Daftar Teknisi</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>ID</th><th>Nama</th><th>No. HP</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="techs-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot-copy">© 2026 Kita Berkah Teknik — Admin Dashboard</div>
+</div>
+
+<div id="toast"></div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, query, orderBy, onSnapshot, getDocs, doc, addDoc, updateDoc, deleteDoc, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ===== KONFIGURASI FIREBASE — ganti dengan proyek kita berkah teknik kamu =====
+const firebaseConfig = {
+  apiKey: "API_KEY_ANDA",
+  authDomain: "PROJECT_ID.firebaseapp.com",
+  projectId: "PROJECT_ID",
+  storageBucket: "PROJECT_ID.firebasestorage.app",
+  messagingSenderId: "SENDER_ID",
+  appId: "1:APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// GANTI dengan password admin kamu (dipakai untuk login)
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'ganti-password-admin';
+
+// STATE
+let currentAdmin = null;
+let allOrders = [];
+let allTechs = [];
+let unsubOrders = null;
+let unsubTechs = null;
+let editingOrderId = null;
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fmtDate(o){
+  const s=o.scheduled_date||null;
+  let d;
+  if(s){d=new Date(s+'T00:00:00');}
+  else if(o.created_at&&o.created_at.seconds){d=new Date(o.created_at.seconds*1000);}
+  else return '—';
+  const mons=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  return d.getDate()+' '+mons[d.getMonth()]+' '+d.getFullYear();
+}
+
+// AUTH
+function doLogin(){
+  const u=document.getElementById('l-user').value.trim();
+  const p=document.getElementById('l-pass').value;
+  const errEl=document.getElementById('l-err');
+  const btn=document.getElementById('btn-login');
+  errEl.textContent='';
+  if(!u||!p){errEl.textContent='Username dan password wajib diisi.';return;}
+  if(u!==ADMIN_USER||p!==ADMIN_PASS){errEl.textContent='Username / password salah.';return;}
+  currentAdmin={user:u};
+  sessionStorage.setItem('kbt_admin',JSON.stringify(currentAdmin));
+  showDashboard();
+}
+function doLogout(){
+  if(!confirm('Keluar dari admin dashboard?'))return;
+  sessionStorage.removeItem('kbt_admin');
+  if(unsubOrders){unsubOrders();unsubOrders=null;}
+  if(unsubTechs){unsubTechs();unsubTechs=null;}
+  currentAdmin=null;
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('l-user').value='';document.getElementById('l-pass').value='';document.getElementById('l-err').textContent='';
+  document.getElementById('btn-login').textContent='Masuk';
+}
+function showDashboard(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  document.getElementById('hdr-name').textContent='admin';
+  listenOrders();
+  listenTechs();
+}
+
+// LISTENERS
+function listenOrders(){
+  if(unsubOrders)unsubOrders();
+  unsubOrders=onSnapshot(query(collection(db,'orders'),orderBy('created_at','desc')),snap=>{
+    allOrders=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderOrders();
+  },err=>{
+    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="7" class="empty-state">⚠️ Gagal memuat: '+esc(err.message)+'</td></tr>';
+  });
+}
+function listenTechs(){
+  if(unsubTechs)unsubTechs();
+  unsubTechs=onSnapshot(collection(db,'technicians'),snap=>{
+    allTechs=snap.docs.map(d=>({id:d.id,...d.data()}));
+    populateTechSelect();
+    renderTechs();
+    renderOrdersStats();
+  });
+}
+
+// ORDERS RENDER
+function renderOrdersStats(){
+  const active=allTechs.filter(t=>t.is_active!==false).length;
+  const pend=allOrders.filter(o=>(o.task_status||'belum')!=='selesai').length;
+  document.getElementById('stat-total').textContent=allOrders.length;
+  document.getElementById('stat-pending').textContent=pend;
+  document.getElementById('stat-done').textContent=allOrders.length-pend;
+  document.getElementById('stat-tech').textContent=active;
+}
+function techName(id){
+  const t=allTechs.find(x=>x.tech_id===id);
+  return t?t.name:(id||'—');
+}
+function renderOrders(){
+  renderOrdersStats();
+  const q=document.getElementById('search-orders').value.toLowerCase();
+  let list=allOrders;
+  if(q){
+    list=list.filter(o=>{
+      const hay=(o.customer_name||o.name||'')+' '+(o.phone||'')+' '+(o.code||o.id||'')+' '+techName(o.assigned_to);
+      return hay.toLowerCase().includes(q);
+    });
+  }
+  const tb=document.getElementById('orders-tbody');
+  if(list.length===0){tb.innerHTML='<tr><td colspan="7" class="empty-state"><div class="empty-ico">📋</div>Tidak ada pesanan.</td></tr>';return;}
+  tb.innerHTML=list.map(o=>{
+    const st=o.task_status||'belum';
+    const done=st==='selesai';
+    const badge=done?'<span class="badge badge-green">✅ Selesai</span>':'<span class="badge badge-amber">⏳ Belum</span>';
+    return `<tr>
+      <td><span class="code-badge">${esc(o.code||o.id||'—')}</span></td>
+      <td><b>${esc(o.customer_name||o.name||'—')}</b><br><span style="font-size:0.75rem;color:var(--gray-600)">${esc(o.phone||'')}</span></td>
+      <td>${esc(o.service_type||'—')}</td>
+      <td>${fmtDate(o)}</td>
+      <td>${esc(techName(o.assigned_to))}</td>
+      <td>${badge}</td>
+      <td>
+        ${!done?`<button class="act-btn tog" data-act="done" data-id="${o.id}">✅</button>`:''}
+        <button class="act-btn" data-act="edit" data-id="${o.id}">✏️</button>
+        <button class="act-btn del" data-act="del" data-id="${o.id}">🗑️</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  tb.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click',async()=>{
+      const id=b.dataset.id;
+      const act=b.dataset.act;
+      if(act==='done'){
+        if(!confirm('Tandai pesanan selesai?'))return;
+        try{await updateDoc(doc(db,'orders',id),{task_status:'selesai',completed_at:serverTimestamp()});showToast('✅ Ditandai selesai');}catch(e){alert('Gagal: '+e.message);}
+      }else if(act==='edit'){
+        const o=allOrders.find(x=>x.id===id);if(!o)return;
+        editingOrderId=id;
+        document.getElementById('o-name').value=o.customer_name||o.name||'';
+        document.getElementById('o-phone').value=o.phone||'';
+        document.getElementById('o-address').value=o.address||'';
+        document.getElementById('o-service').value=o.service_type||'';
+        document.getElementById('o-detail').value=o.services_text||o.services||o.detail||'';
+        document.getElementById('o-date').value=o.scheduled_date||'';
+        document.getElementById('o-assign').value=o.assigned_to||'';
+        document.querySelector('#pane-orders .panel .panel-title').textContent='✏️ Edit Pesanan';
+        document.querySelector('#orderForm .create-btn').innerHTML='Update Pesanan';
+        document.getElementById('orderMsg').textContent='';
+        document.getElementById('orderMsg').classList.remove('ok','err');
+        window.scrollTo({top:0,behavior:'smooth'});
+      }else if(act==='del'){
+        if(!confirm('Hapus pesanan ini permanen?'))return;
+        try{await deleteDoc(doc(db,'orders',id));showToast('🗑️ Pesanan dihapus');}catch(e){alert('Gagal: '+e.message);}
+      }
+    });
+  });
+}
+
+// TECHNICIANS
+function populateTechSelect(){
+  const sel=document.getElementById('o-assign');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— pilih —</option>'+allTechs.filter(t=>t.is_active!==false).map(t=>`<option value="${esc(t.tech_id)}">${esc(t.name)} (${esc(t.tech_id)})</option>`).join('');
+  sel.value=cur;
+}
+function renderTechs(){
+  const tb=document.getElementById('techs-tbody');
+  if(allTechs.length===0){tb.innerHTML='<tr><td colspan="5" class="empty-state"><div class="empty-ico">👷</div>Belum ada teknisi.</td></tr>';return;}
+  tb.innerHTML=allTechs.map(t=>{
+    const active=t.is_active!==false;
+    return `<tr>
+      <td><span class="code-badge">${esc(t.tech_id)}</span></td>
+      <td><b>${esc(t.name)}</b></td>
+      <td>${esc(t.phone||'—')}</td>
+      <td>${active?'<span class="badge badge-green">Aktif</span>':'<span class="badge badge-red">Nonaktif</span>'}</td>
+      <td><button class="act-btn tog" data-id="${t.id}" data-cur="${active}">${active?'Nonaktifkan':'Aktifkan'}</button>
+          <button class="act-btn del" data-del="${t.id}">Hapus</button></td>
+    </tr>`;
+  }).join('');
+
+  tb.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click',async()=>{
+      const id=b.dataset.id||b.dataset.del;
+      if(b.dataset.del!==undefined){
+        if(!confirm('Hapus teknisi ini?'))return;
+        try{await deleteDoc(doc(db,'technicians',id));showToast('🗑️ Teknisi dihapus');}catch(e){alert('Gagal: '+e.message);}
+        return;
+      }
+      const cur=b.dataset.cur==='true';
+      const target=!cur;
+      try{await updateDoc(doc(db,'technicians',id),{is_active:target});showToast(target?'✅ Teknisi diaktifkan':'⏸️ Teknisi dinonaktifkan');}catch(e){alert('Gagal: '+e.message);}
+    });
+  });
+}
+
+// FORMS
+document.getElementById('orderForm').addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  const btn=e.target.querySelector('.create-btn');
+  btn.disabled=true;
+  const name=document.getElementById('o-name').value.trim();
+  const phone=document.getElementById('o-phone').value.trim();
+  const msgEl=document.getElementById('orderMsg');
+  msgEl.classList.remove('ok','err');
+  if(!name||!phone){msgEl.textContent='Nama & no. HP wajib diisi.';msgEl.classList.add('err');btn.disabled=false;return;}
+  const data={
+    customer_name:name,
+    name:name,
+    phone:phone,
+    address:document.getElementById('o-address').value.trim(),
+    service_type:document.getElementById('o-service').value.trim(),
+    services_text:document.getElementById('o-detail').value.trim()||null,
+    detail:document.getElementById('o-detail').value.trim()||null,
+    scheduled_date:document.getElementById('o-date').value||null,
+    assigned_to:document.getElementById('o-assign').value||null,
+    task_status:'belum'
+  };
+  try{
+    if(editingOrderId){
+      await updateDoc(doc(db,'orders',editingOrderId),data);
+      msgEl.textContent='✅ Pesanan diperbarui';msgEl.classList.add('ok');
+      editingOrderId=null;
+      document.querySelector('#pane-orders .panel .panel-title').textContent='➕ Tambah Pesanan';
+      document.querySelector('#orderForm .create-btn').innerHTML='Simpan Pesanan';
+    }else{
+      await addDoc(collection(db,'orders'),{...data,created_at:serverTimestamp()});
+      msgEl.textContent='✅ Pesanan disimpan';msgEl.classList.add('ok');
+    }
+    document.getElementById('orderForm').reset();
+  }catch(err){
+    msgEl.textContent='Gagal: '+err.message;msgEl.classList.add('err');
+  }
+  btn.disabled=false;
+});
+
+document.getElementById('techForm').addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  const btn=e.target.querySelector('.create-btn');
+  btn.disabled=true;
+  const name=document.getElementById('t-name').value.trim();
+  const id=document.getElementById('t-id').value.trim().toUpperCase();
+  const pass=document.getElementById('t-pass').value;
+  const msgEl=document.getElementById('techMsg');
+  msgEl.classList.remove('ok','err');
+  if(!name||!id||!pass){msgEl.textContent='Nama, ID, dan password wajib diisi.';msgEl.classList.add('err');btn.disabled=false;return;}
+  // cek duplikat ID
+  const exists=allTechs.find(t=>t.tech_id===id);
+  if(exists){msgEl.textContent='ID sudah dipakai.';msgEl.classList.add('err');btn.disabled=false;return;}
+  try{
+    await addDoc(collection(db,'technicians'),{name,tech_id:id,phone:document.getElementById('t-phone').value.trim(),password:pass,is_active:true,created_at:serverTimestamp()});
+    msgEl.textContent='✅ Teknisi disimpan';msgEl.classList.add('ok');
+    document.getElementById('techForm').reset();
+  }catch(err){
+    msgEl.textContent='Gagal: '+err.message;msgEl.classList.add('err');
+  }
+  btn.disabled=false;
+});
+
+// TABS
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('act',b===btn));
+    document.querySelectorAll('.tab-pane').forEach(p=>p.classList.toggle('act',p.id==='pane-'+btn.dataset.tab));
+  });
+});
+
+// SEARCH
+document.getElementById('search-orders').addEventListener('input',renderOrders);
+
+// EVENTS
+document.getElementById('btn-login').addEventListener('click',doLogin);
+document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('btn-logout').addEventListener('click',doLogout);
+
+(function(){
+  try{const s=sessionStorage.getItem('kbt_admin');if(s){currentAdmin=JSON.parse(s);showDashboard();}}catch(e){}
+})();
+</script>
+
+</body>
+</html>

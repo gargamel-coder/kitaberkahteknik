@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kita Berkah Teknik — Portal Teknisi</title>
+<meta name="theme-color" content="#0056a7">
+<link rel="icon" type="image/png" href="../assets/logo-icon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#0056a7; --primary-dark:#003b73; --primary-light:#e6f0fa;
+  --accent:#ffb347; --gray-100:#f1f5f9; --gray-200:#e2e8f0;
+  --gray-600:#4a5568; --gray-800:#1e293b; --white:#fff;
+  --red:#EF4444; --green:#16A34A; --shadow:0 12px 40px rgba(0,0,0,0.06);
+  --radius:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--gray-100);color:var(--gray-800);min-height:100vh;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,#f1f7fe 0%,#fff 100%);padding:20px;}
+.login-card{background:var(--white);border-radius:24px;padding:44px 36px;box-shadow:var(--shadow);width:100%;max-width:400px;text-align:center;}
+.login-logo{font-size:1.7rem;font-weight:800;color:var(--primary);margin-bottom:4px;}
+.login-logo span{color:var(--gray-800);}
+.login-badge{display:inline-block;background:var(--primary-light);color:var(--primary);font-weight:600;padding:4px 14px;border-radius:100px;font-size:0.75rem;margin-bottom:8px;letter-spacing:0.3px;}
+.login-sub{font-size:0.85rem;color:var(--gray-600);margin-bottom:28px;}
+.l-label{font-size:0.8rem;font-weight:600;display:block;text-align:left;margin-bottom:6px;}
+.l-input{width:100%;padding:13px 14px;border:2px solid var(--gray-200);border-radius:14px;font-family:'Inter',sans-serif;font-size:0.92rem;background:var(--gray-100);outline:none;transition:all .2s;margin-bottom:16px;}
+.l-input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 4px rgba(0,86,167,0.10);}
+.l-btn{width:100%;padding:14px;border-radius:14px;background:var(--primary);color:#fff;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.95rem;font-weight:700;transition:all .2s;}
+.l-btn:hover{background:var(--primary-dark);}
+.l-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.l-err{font-size:0.82rem;color:var(--red);margin-top:12px;min-height:18px;}
+
+/* DASHBOARD */
+#dashboard{display:none;}
+header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:15px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.hdr-logo{font-size:1.25rem;font-weight:800;color:var(--primary);}
+.hdr-logo span{color:var(--gray-800);}
+.hdr-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.hdr-user{font-size:0.82rem;color:var(--gray-600);}
+.logout-btn{padding:8px 18px;border-radius:100px;background:transparent;border:2px solid var(--gray-200);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
+.dash-body{padding:28px;max-width:900px;margin:0 auto;}
+.welcome{font-size:1.3rem;font-weight:700;margin-bottom:2px;}
+.welcome-date{font-size:0.85rem;color:var(--gray-600);margin-bottom:22px;}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin-bottom:28px;}
+.stat-c{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 20px;}
+.stat-c .s-num{font-size:1.8rem;font-weight:800;color:var(--primary);}
+.stat-c .s-lbl{font-size:0.75rem;color:var(--gray-600);margin-top:2px;}
+.stat-c.green .s-num{color:var(--green);}
+
+.filter-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.filter-pill{padding:7px 16px;border-radius:100px;border:2px solid var(--gray-200);background:transparent;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;color:var(--gray-600);transition:all .15s;}
+.filter-pill.act{border-color:var(--primary);background:var(--primary);color:#fff;}
+.custom-date{display:none;padding:8px 12px;border:2px solid var(--gray-200);border-radius:12px;font-family:'Inter',sans-serif;font-size:0.85rem;}
+
+.task-list{display:flex;flex-direction:column;gap:14px;}
+.task-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:20px 22px;transition:box-shadow .2s;}
+.task-card:hover{box-shadow:var(--shadow);}
+.task-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.task-id{font-family:monospace;font-size:0.85rem;font-weight:700;background:var(--primary-light);color:var(--primary);padding:3px 10px;border-radius:6px;}
+.task-time{font-size:0.75rem;color:var(--gray-600);}
+.task-body{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;font-size:0.85rem;color:var(--gray-600);margin-bottom:12px;}
+.task-body b{color:var(--gray-800);}
+.task-services{font-size:0.82rem;color:var(--gray-800);background:var(--gray-100);padding:10px 14px;border-radius:10px;margin-bottom:12px;white-space:pre-line;}
+.task-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.status-badge{padding:6px 14px;border-radius:100px;font-size:0.75rem;font-weight:700;}
+.status-badge.belum{background:#FEF9C3;color:#854D0E;}
+.status-badge.selesai{background:#DCFCE7;color:#166534;}
+.btn-selesai{padding:10px 20px;border-radius:12px;background:var(--green);color:#fff;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:700;transition:all .2s;}
+.btn-selesai:hover{background:#15803D;transform:translateY(-1px);}
+.btn-selesai:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+.empty-state{text-align:center;padding:50px 20px;color:var(--gray-600);font-size:0.88rem;}
+.empty-ico{font-size:2.6rem;margin-bottom:8px;}
+
+#toast{position:fixed;bottom:28px;right:28px;background:var(--gray-800);color:#fff;padding:12px 22px;border-radius:14px;font-size:0.85rem;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,0.2);opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999;}
+#toast.show{opacity:1;transform:translateY(0);}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-sm{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px;}
+.foot-copy{text-align:center;padding:20px 28px;font-size:0.76rem;color:var(--gray-600);border-top:1px solid var(--gray-200);background:var(--white);margin-top:30px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-badge">PORTAL TEKNISI</div>
+    <div class="login-logo">Kita Berkah <span>Teknik</span></div>
+    <p class="login-sub">Masuk dengan ID &amp; password teknisi kamu</p>
+    <label class="l-label">ID Teknisi</label>
+    <input class="l-input" id="l-id" placeholder="Contoh: T001" maxlength="20">
+    <label class="l-label">Password</label>
+    <input class="l-input" id="l-pass" type="password" placeholder="Password kamu">
+    <button class="l-btn" id="btn-login">Masuk</button>
+    <div class="l-err" id="l-err"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <header>
+    <div class="hdr-logo">Kita Berkah <span>Teknik</span></div>
+    <div class="hdr-right">
+      <span class="hdr-user" id="hdr-name">—</span>
+      <button class="logout-btn" id="btn-logout">Keluar</button>
+    </div>
+  </header>
+
+  <div class="dash-body">
+    <div class="welcome" id="welcome-msg">Hai! 👋</div>
+    <div class="welcome-date" id="welcome-date">—</div>
+
+    <div class="stat-row">
+      <div class="stat-c"><div class="s-num" id="stat-today">0</div><div class="s-lbl">Jadwal Hari Ini</div></div>
+      <div class="stat-c green"><div class="s-num" id="stat-today-done">0</div><div class="s-lbl">Selesai Hari Ini</div></div>
+      <div class="stat-c"><div class="s-num" id="stat-week">0</div><div class="s-lbl">Pekerjaan Minggu Ini</div></div>
+      <div class="stat-c"><div class="s-num" id="stat-total">0</div><div class="s-lbl">Total Pekerjaan</div></div>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-pill act" data-f="today">Hari Ini</button>
+      <button class="filter-pill" data-f="week">Minggu Ini</button>
+      <button class="filter-pill" data-f="all">Semua</button>
+      <input type="date" class="custom-date" id="custom-date">
+    </div>
+
+    <div class="task-list" id="task-list"></div>
+  </div>
+
+  <div class="foot-copy">© 2026 Kita Berkah Teknik — Portal Teknisi</div>
+</div>
+
+<div id="toast"></div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, query, where, onSnapshot, getDocs, doc, updateDoc, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ===== KONFIGURASI FIREBASE — ganti dengan proyek kita berkah teknik kamu =====
+const firebaseConfig = {
+  apiKey: "API_KEY_ANDA",
+  authDomain: "PROJECT_ID.firebaseapp.com",
+  projectId: "PROJECT_ID",
+  storageBucket: "PROJECT_ID.firebasestorage.app",
+  messagingSenderId: "SENDER_ID",
+  appId: "1:APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// STATE
+let currentTech = null;
+let myOrders = [];
+let dateFilter = 'today';
+let unsubOrders = null;
+
+// UTILS
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function getWeekBounds(){const n=new Date();n.setHours(0,0,0,0);const day=n.getDay();const mon=new Date(n);mon.setDate(n.getDate()-(day===0?6:day-1));const sun=new Date(mon);sun.setDate(mon.getDate()+6);return{start:mon,end:sun};}
+function getOrderDate(o){
+  if(o.scheduled_date) return o.scheduled_date;
+  if(o.date){const p=new Date(o.date);if(!isNaN(p))return p.getFullYear()+'-'+String(p.getMonth()+1).padStart(2,'0')+'-'+String(p.getDate()).padStart(2,'0');}
+  if(o.created_at&&o.created_at.seconds){const d=new Date(o.created_at.seconds*1000);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  return null;
+}
+function fmtDate(o){const s=getOrderDate(o);if(!s)return'—';const d=new Date(s+'T00:00:00');const mons=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];return d.getDate()+' '+mons[d.getMonth()]+' '+d.getFullYear();}
+function filterByDate(orders){
+  const today=todayStr();
+  if(dateFilter==='today') return orders.filter(o=>getOrderDate(o)===today);
+  if(dateFilter==='week'){const{start,end}=getWeekBounds();return orders.filter(o=>{const d=getOrderDate(o);if(!d)return false;const dt=new Date(d);dt.setHours(0,0,0,0);return dt>=start&&dt<=end;});}
+  if(dateFilter==='custom'){const v=document.getElementById('custom-date').value;return orders.filter(o=>getOrderDate(o)===v);}
+  return orders;
+}
+
+// AUTH
+async function doLogin(){
+  const techId=document.getElementById('l-id').value.trim().toUpperCase();
+  const pass=document.getElementById('l-pass').value;
+  const errEl=document.getElementById('l-err');
+  const btn=document.getElementById('btn-login');
+  errEl.textContent='';
+  if(!techId||!pass){errEl.textContent='ID dan password wajib diisi.';return;}
+  btn.disabled=true;btn.innerHTML='<span class="spinner-sm"></span> Memeriksa...';
+  try{
+    const snap=await getDocs(query(collection(db,'technicians'),where('tech_id','==',techId)));
+    if(snap.empty){errEl.textContent='ID tidak ditemukan. Hubungi admin.';btn.disabled=false;btn.textContent='Masuk';return;}
+    const td=snap.docs[0].data();
+    if(td.is_active===false){errEl.textContent='Akun nonaktif. Hubungi admin.';btn.disabled=false;btn.textContent='Masuk';return;}
+    if(td.password!==pass){errEl.textContent='Password salah.';btn.disabled=false;btn.textContent='Masuk';return;}
+    currentTech={id:snap.docs[0].id,...td};
+    sessionStorage.setItem('kbt_tech',JSON.stringify(currentTech));
+    showDashboard();
+  }catch(e){errEl.textContent='Gagal login: '+e.message;btn.disabled=false;btn.textContent='Masuk';}
+}
+async function doLogout(){
+  if(!confirm('Keluar dari portal teknisi?'))return;
+  sessionStorage.removeItem('kbt_tech');
+  if(unsubOrders){unsubOrders();unsubOrders=null;}
+  currentTech=null;myOrders=[];
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('l-id').value='';document.getElementById('l-pass').value='';document.getElementById('l-err').textContent='';
+  document.getElementById('btn-login').textContent='Masuk';
+}
+function showDashboard(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  const now=new Date();const days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const mons=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  document.getElementById('hdr-name').textContent=currentTech.name;
+  document.getElementById('welcome-msg').textContent='Hai, '+currentTech.name+'! 👋';
+  document.getElementById('welcome-date').textContent=days[now.getDay()]+', '+now.getDate()+' '+mons[now.getMonth()]+' '+now.getFullYear();
+  setDateFilter(dateFilter);
+  listenMyOrders();
+}
+
+// ORDERS
+function listenMyOrders(){
+  if(unsubOrders)unsubOrders();
+  const q=query(collection(db,'orders'),where('assigned_to','==',currentTech.tech_id));
+  unsubOrders=onSnapshot(q,snap=>{
+    myOrders=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.created_at?.seconds||0)-(a.created_at?.seconds||0));
+    renderAll();
+  },err=>{
+    console.error(err);
+    document.getElementById('task-list').innerHTML='<div class="empty-state"><div class="empty-ico">⚠️</div><p style="color:#EF4444;font-weight:600">Gagal memuat tugas</p><p style="font-size:0.78rem;margin-top:6px">'+err.message+'</p></div>';
+  });
+}
+
+// RENDER
+function renderAll(){renderStats();renderTasks();}
+function renderStats(){
+  const today=todayStr();const{start:wStart,end:wEnd}=getWeekBounds();const now=new Date();
+  const inToday=myOrders.filter(o=>getOrderDate(o)===today);
+  const inWeek=myOrders.filter(o=>{const d=getOrderDate(o);if(!d)return false;const dt=new Date(d);dt.setHours(0,0,0,0);return dt>=wStart&&dt<=wEnd;});
+  const count=(arr,st)=>arr.filter(o=>(o.task_status||'belum')===st).length;
+  document.getElementById('stat-today').textContent=inToday.length;
+  document.getElementById('stat-today-done').textContent=count(inToday,'selesai');
+  document.getElementById('stat-week').textContent=inWeek.length;
+  document.getElementById('stat-total').textContent=myOrders.length;
+}
+function renderTasks(){
+  const list=document.getElementById('task-list');
+  const filtered=filterByDate(myOrders);
+  if(filtered.length===0){
+    list.innerHTML='<div class="empty-state"><div class="empty-ico">🗓️</div><p>Tidak ada pekerjaan di filter ini.</p></div>';
+    return;
+  }
+  list.innerHTML=filtered.map(o=>{
+    const st=o.task_status||'belum';
+    const done=st==='selesai';
+    const services=o.services_text||o.services||o.detail||'—';
+    return `<div class="task-card">
+      <div class="task-head">
+        <span class="task-id">${o.code||o.id||'—'}</span>
+        <span class="task-time">${fmtDate(o)}</span>
+      </div>
+      <div class="task-body">
+        <div><b>Nama:</b> ${o.customer_name||o.name||'—'}</div>
+        <div><b>No. HP:</b> ${o.phone||'—'}</div>
+        <div><b>Alamat:</b> ${o.address||'—'}</div>
+        <div><b>Layanan:</b> ${o.service_type||'—'}</div>
+      </div>
+      <div class="task-services">${services}</div>
+      <div class="task-foot">
+        <span class="status-badge ${st}">${st==='selesai'?'✅ Selesai':'⏳ Belum selesai'}</span>
+        ${!done?`<button class="btn-selesai" data-id="${o.id}">Selesai</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.btn-selesai').forEach(b=>{
+    b.addEventListener('click',async()=>{
+      const id=b.dataset.id;
+      if(!confirm('Tandai pekerjaan ini selesai?'))return;
+      try{
+        await updateDoc(doc(db,'orders',id),{task_status:'selesai',completed_at:serverTimestamp(),completed_by:currentTech.tech_id});
+        showToast('✅ Pekerjaan ditandai selesai');
+      }catch(e){alert('Gagal update: '+e.message);}
+    });
+  });
+}
+function setDateFilter(f){
+  dateFilter=f;
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.toggle('act',p.dataset.f===f));
+  document.getElementById('custom-date').style.display=f==='custom'?'block':'none';
+  renderTasks();
+}
+
+// EVENTS
+document.getElementById('btn-login').addEventListener('click',doLogin);
+document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('btn-logout').addEventListener('click',doLogout);
+document.querySelectorAll('.filter-pill').forEach(p=>p.addEventListener('click',()=>setDateFilter(p.dataset.f)));
+document.getElementById('custom-date').addEventListener('change',()=>{dateFilter='custom';setDateFilter('custom');});
+
+// Auto-login jika ada sesi
+(function(){
+  try{
+    const s=sessionStorage.getItem('kbt_tech');
+    if(s){currentTech=JSON.parse(s);showDashboard();}
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>
