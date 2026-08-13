@@ -821,6 +821,16 @@
             }
             .header .container {
                 padding: 0 16px;
+                gap: 10px;
+            }
+            .logo {
+                font-size: 1.25rem;
+            }
+            .logo-sub {
+                white-space: normal;
+                font-size: 0.6rem;
+                letter-spacing: 0.02em;
+                line-height: 1.1;
             }
             .hero {
                 padding: 48px 0 60px;
@@ -856,6 +866,13 @@
             .btn {
                 padding: 12px 24px;
                 font-size: 0.95rem;
+            }
+            .logo {
+                font-size: 1.1rem;
+                gap: 8px;
+            }
+            .logo-sub {
+                font-size: 0.55rem;
             }
         }
 
@@ -1207,11 +1224,11 @@
                 </div>
                 <div class="contact-detail">
                     <i class="fas fa-envelope"></i>
-                    <span>info@kitaberkahteknik.id</span>
+                    <span>ptkitaberkahteknik@gmail.com</span>
                 </div>
                 <div class="contact-detail">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>Jl. Lontar Dalam No 38 RT 003/004, Tugu Utara, Koja, Jakarta Utara 14260</span>
+                    <span>Jl. Lontar Dalam No 38 D RT 003 RW 004, Tugu Utara, Koja, Jakarta Utara 14260</span>
                 </div>
                 <div class="contact-detail">
                     <i class="fas fa-clock"></i>
@@ -1232,6 +1249,11 @@
                     <div class="form-group">
                         <label for="address">Alamat</label>
                         <input type="text" id="address" placeholder="Alamat lengkap unit AC yang akan dicuci" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookingDate">📅 Tanggal Layanan</label>
+                        <input type="date" id="bookingDate" />
                     </div>
 
                     <div class="form-group">
@@ -1292,8 +1314,8 @@
                 <h4>Hubungi Kami</h4>
                 <ul>
                     <li><i class="fas fa-phone" style="width:20px;"></i> 0813-1560-4197</li>
-                    <li><i class="fas fa-envelope" style="width:20px;"></i> info@kitaberkahteknik.id</li>
-                    <li><i class="fas fa-map-marker-alt" style="width:20px;"></i> Tugu Utara, Koja, Jakarta Utara</li>
+                    <li><i class="fas fa-envelope" style="width:20px;"></i> ptkitaberkahteknik@gmail.com</li>
+                    <li><i class="fas fa-map-marker-alt" style="width:20px;"></i> Jl. Lontar Dalam No 38 D, Tugu Utara, Koja</li>
                     <li style="display: flex; gap: 12px; margin-top: 8px;">
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-facebook"></i></a>
@@ -1543,15 +1565,29 @@
             const phone = document.getElementById('phone').value.trim();
             const address = document.getElementById('address').value.trim();
             const message = document.getElementById('message').value.trim();
+            const bookingDate = document.getElementById('bookingDate').value;
 
             const chosen = bookingServices.filter(s => qty[s.id] > 0);
             if (!name || !phone) {
                 alert('Mohon isi nama dan nomor telepon.');
                 return;
             }
+            if (!bookingDate) {
+                alert('Mohon pilih tanggal layanan.');
+                return;
+            }
             if (chosen.length === 0) {
                 alert('Mohon pilih minimal 1 layanan.');
                 return;
+            }
+
+            // Format tanggal jadi "Senin, 13 Agustus 2026"
+            function fmtDate(v) {
+                if (!v) return '';
+                const d = new Date(v + 'T00:00:00');
+                const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                const mons = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                return days[d.getDay()] + ', ' + d.getDate() + ' ' + mons[d.getMonth()] + ' ' + d.getFullYear();
             }
 
             const total = updateTotal();
@@ -1560,6 +1596,7 @@
             let text = 'Halo Kita Berkah Teknik, saya ingin booking layanan:\n\n';
             text += 'Nama: ' + name + '\n';
             text += 'No. HP: ' + phone + '\n';
+            text += 'Tanggal Layanan: ' + fmtDate(bookingDate) + '\n';
             if (address) text += 'Alamat: ' + address + '\n';
             text += '\nLayanan:\n';
             chosen.forEach(s => { text += '- ' + s.name + ' x' + qty[s.id] + ' = ' + linePrice(s) + '\n'; });
@@ -1580,7 +1617,7 @@
                     services_text: servicesText,
                     service_type: chosen.map(s => s.name).join(', '),
                     detail: message,
-                    scheduled_date: null,
+                    scheduled_date: bookingDate,
                     total_estimate: total
                 }).then(saved => {
                     console.log(saved ? '✅ Order tersimpan ke Firestore' : '❌ Gagal simpan order ke Firestore');
