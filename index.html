@@ -618,6 +618,45 @@
             color: var(--gray-600);
             margin: -6px 0 18px;
         }
+        /* ----- BOOKING CATEGORY TABS ----- */
+        .bk-cats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .bk-cat {
+            padding: 9px 18px;
+            border-radius: 60px;
+            border: 2px solid var(--gray-200);
+            background: #fff;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--gray-600);
+            transition: all .15s;
+        }
+        .bk-cat:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .bk-cat.act {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+        .bk-panel {
+            display: none;
+        }
+        .bk-panel.act {
+            display: block;
+            animation: fadeIn .25s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
         .contact-form {
             background: #fff;
             padding: 40px 36px;
@@ -1400,23 +1439,56 @@
             bookingServices.forEach(s => qty[s.id] = 0);
 
             const wrap = document.getElementById('bookingServices');
-            wrap.innerHTML = bookingServices.map(s =>
-                '<div class="booking-service-item">' +
-                    '<div class="bsi-info">' +
-                        '<div class="bsi-name">' + s.name + '</div>' +
-                        '<div class="bsi-price' + (s.price > 0 ? '' : ' bsi-price-na') + '">' +
-                            (s.price > 0 ? formatRupiah(s.price) : 'Hubungi') +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="qty-stepper">' +
-                        '<button type="button" data-action="dec" data-id="' + s.id + '">−</button>' +
-                        '<span class="qty-value" id="qty-' + s.id + '">0</span>' +
-                        '<button type="button" data-action="inc" data-id="' + s.id + '">+</button>' +
-                    '</div>' +
-                '</div>'
+
+            // 1) Baris tombol kategori (accordion)
+            const catsHtml = SERVICE_CATALOG.map((cat, i) =>
+                '<button type="button" class="bk-cat' + (i === 0 ? ' act' : '') + '" data-bkcat="' + i + '">' + cat.category + '</button>'
             ).join('');
 
-            wrap.querySelectorAll('button').forEach(btn => {
+            // 2) Panel detail per kategori
+            const panelsHtml = SERVICE_CATALOG.map((cat, i) => {
+                const items = cat.items.map(item => {
+                    const variants = [];
+                    if (item.has_size) {
+                        variants.push(
+                            { id: item.id + '-kecil', name: item.name + ' (1/2 – 1 PK)',  price: getPrice(item.id, 'kecil') },
+                            { id: item.id + '-besar', name: item.name + ' (1.5 – 2 PK)',  price: getPrice(item.id, 'besar') }
+                        );
+                    } else {
+                        variants.push({ id: item.id, name: item.name, price: getPrice(item.id, 'single') });
+                    }
+                    return variants.map(s =>
+                        '<div class="booking-service-item">' +
+                            '<div class="bsi-info">' +
+                                '<div class="bsi-name">' + s.name + '</div>' +
+                                '<div class="bsi-price' + (s.price > 0 ? '' : ' bsi-price-na') + '" style="color:' + (s.price > 0 ? 'var(--primary)' : 'var(--gray-600)') + ';">' +
+                                    (s.price > 0 ? formatRupiah(s.price) : 'Hubungi') +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="qty-stepper">' +
+                                '<button type="button" data-action="dec" data-id="' + s.id + '">−</button>' +
+                                '<span class="qty-value" id="qty-' + s.id + '">0</span>' +
+                                '<button type="button" data-action="inc" data-id="' + s.id + '">+</button>' +
+                            '</div>' +
+                        '</div>'
+                    ).join('');
+                }).join('');
+                return '<div class="bk-panel' + (i === 0 ? ' act' : '') + '" data-bkpanel="' + i + '">' + items + '</div>';
+            }).join('');
+
+            wrap.innerHTML = '<div class="bk-cats">' + catsHtml + '</div>' + panelsHtml;
+
+            // 3) Switch kategori (tutup/buka panel)
+            wrap.querySelectorAll('.bk-cat').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = btn.dataset.bkcat;
+                    wrap.querySelectorAll('.bk-cat').forEach(b => b.classList.toggle('act', b.dataset.bkcat === idx));
+                    wrap.querySelectorAll('.bk-panel').forEach(p => p.classList.toggle('act', p.dataset.bkpanel === idx));
+                });
+            });
+
+            // 4) Stepper +/−
+            wrap.querySelectorAll('.qty-stepper button').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = btn.dataset.id;
                     if (btn.dataset.action === 'inc') {
@@ -1424,7 +1496,8 @@
                     } else if (qty[id] > 0) {
                         qty[id]--;
                     }
-                    document.getElementById('qty-' + id).textContent = qty[id];
+                    const el = document.getElementById('qty-' + id);
+                    if (el) el.textContent = qty[id];
                     updateTotal();
                 });
             });
