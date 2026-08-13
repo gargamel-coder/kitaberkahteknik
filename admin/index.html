@@ -212,6 +212,7 @@ tr:hover td{background:var(--primary-light);}
     <div class="tabs">
       <button class="tab-btn act" data-tab="orders">📋 Pesanan</button>
       <button class="tab-btn" data-tab="technicians">👷 Teknisi</button>
+      <button class="tab-btn" data-tab="prices">💲 Harga Layanan</button>
     </div>
 
     <!-- ORDERS -->
@@ -307,6 +308,17 @@ tr:hover td{background:var(--primary-light);}
         </div>
       </div>
     </div>
+
+    <!-- PRICES -->
+    <div class="tab-pane" id="pane-prices">
+      <div class="panel">
+        <div class="panel-title">💲 Harga Layanan</div>
+        <p style="font-size:0.82rem;color:var(--gray-600);margin-bottom:16px;">Kelola daftar harga layanan. Simpan harga untuk tiap layanan — web utama akan menampilkan harga tersebut.</p>
+        <div id="price-form"></div>
+        <button class="create-btn" id="save-all-prices">💾 Simpan Semua Harga</button>
+        <div class="form-msg" id="priceMsg"></div>
+      </div>
+    </div>
   </div>
 
   <div class="foot-copy">© 2026 Kita Berkah Teknik — Admin Dashboard</div>
@@ -317,7 +329,7 @@ tr:hover td{background:var(--primary-light);}
 <!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { initializeFirestore, collection, query, orderBy, onSnapshot, getDocs, doc, addDoc, updateDoc, deleteDoc, serverTimestamp }
+import { initializeFirestore, collection, query, orderBy, onSnapshot, getDocs, doc, addDoc, setDoc, updateDoc, deleteDoc, serverTimestamp }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // ===== KONFIGURASI FIREBASE — ganti dengan proyek kita berkah teknik kamu =====
@@ -395,6 +407,7 @@ function showDashboard(){
   document.getElementById('hdr-name').textContent='admin';
   listenOrders();
   listenTechs();
+  loadPrices();
 }
 
 // LISTENERS
@@ -797,6 +810,100 @@ document.getElementById('techForm').addEventListener('submit',async(e)=>{
   }
   btn.disabled=false;
 });
+
+// PRICES
+const PRICE_CATALOG = [
+  {category:'Perawatan', items:[
+    {id:'cuci', name:'Perawatan Cuci AC', has_size:true},
+    {id:'semi', name:'Perawatan Semi Overhaul', has_size:true},
+    {id:'deep', name:'Perawatan Deep Cleaning', has_size:true},
+  ]},
+  {category:'Perbaikan Refrigerant', items:[
+    {id:'ref1', name:'Perbaikan Kebocoran Refrigerant (1 Sisi Kiri/Kanan)', has_size:true},
+    {id:'ref2', name:'Perbaikan Refrigerant (2 Sisi Kiri/Kanan)', has_size:true},
+  ]},
+  {category:'Pengecekan & Suku Cadang', items:[
+    {id:'cek', name:'Pengecekan', has_size:false},
+    {id:'kapasitor', name:'Ganti Kapasitor', has_size:false},
+    {id:'thermistor', name:'Ganti Thermistor', has_size:false},
+    {id:'sensor', name:'Ganti Sensor', has_size:false},
+  ]},
+  {category:'Bongkar & Pasang', items:[
+    {id:'bongkar', name:'Bongkar', has_size:true},
+    {id:'pasang', name:'Pasang', has_size:true},
+    {id:'bp', name:'Bongkar + Pasang', has_size:true},
+  ]},
+];
+let priceData = {}; // id -> existing doc data
+
+function priceInputHtml(item, data){
+  const d = data||{};
+  const base = 'price-'+item.id;
+  if(item.has_size){
+    return `<div class="fr2">
+      <div class="fg"><label class="fl">Harga 1/2–1 PK</label><input class="fi" type="number" min="0" step="1000" id="${base}-kecil" value="${esc(d.price_kecil==null?'':d.price_kecil)}" placeholder="0"></div>
+      <div class="fg"><label class="fl">Harga 1.5–2 PK</label><input class="fi" type="number" min="0" step="1000" id="${base}-besar" value="${esc(d.price_besar==null?'':d.price_besar)}" placeholder="0"></div>
+    </div>`;
+  }
+  return `<div class="fg"><label class="fl">Harga</label><input class="fi" type="number" min="0" step="1000" id="${base}" value="${esc(d.price==null?'':d.price)}" placeholder="0"></div>`;
+}
+
+function renderPriceForm(){
+  const el = document.getElementById('price-form');
+  let html = '';
+  PRICE_CATALOG.forEach(cat=>{
+    html += `<div class="panel-title" style="margin-top:10px;border-top:1px solid var(--gray-200);padding-top:14px;">🗂 ${esc(cat.category)}</div>`;
+    cat.items.forEach(item=>{
+      const data = priceData[item.id] || {};
+      html += `<div style="border:1px solid var(--gray-200);border-radius:14px;padding:14px;margin-bottom:12px;background:var(--gray-100);">
+        <div class="fl" style="font-size:0.85rem;margin-bottom:10px;">${esc(item.name)}</div>
+        ${priceInputHtml(item,data)}
+      </div>`;
+    });
+  });
+  el.innerHTML = html;
+}
+
+async function loadPrices(){
+  try{
+    const snap = await getDocs(collection(db,'service_prices'));
+    priceData = {};
+    snap.forEach(d=>{ priceData[d.id] = d.data(); });
+    renderPriceForm();
+  }catch(e){
+    document.getElementById('price-form').innerHTML = '<div class="orders-empty">⚠️ Gagal memuat harga: '+esc(e.message)+'</div>';
+  }
+}
+
+async function saveAllPrices(){
+  const btn = document.getElementById('save-all-prices');
+  const msgEl = document.getElementById('priceMsg');
+  msgEl.classList.remove('ok','err');
+  btn.disabled = true;
+  try{
+    for(const cat of PRICE_CATALOG){
+      for(const item of cat.items){
+        const base = 'price-'+item.id;
+        const data = { name:item.name, category:cat.category, has_size:item.has_size };
+        if(item.has_size){
+          data.price_kecil = parseInt(document.getElementById(base+'-kecil').value||'0',10)||0;
+          data.price_besar = parseInt(document.getElementById(base+'-besar').value||'0',10)||0;
+          data.price = null;
+        }else{
+          data.price = parseInt(document.getElementById(base).value||'0',10)||0;
+          data.price_kecil = null;
+          data.price_besar = null;
+        }
+        await setDoc(doc(db,'service_prices',item.id), data, {merge:true});
+      }
+    }
+    msgEl.textContent = '✅ Semua harga tersimpan'; msgEl.classList.add('ok');
+  }catch(err){
+    msgEl.textContent = 'Gagal: '+err.message; msgEl.classList.add('err');
+  }
+  btn.disabled = false;
+}
+document.getElementById('save-all-prices').addEventListener('click', saveAllPrices);
 
 // TABS
 document.querySelectorAll('.tab-btn').forEach(btn=>{

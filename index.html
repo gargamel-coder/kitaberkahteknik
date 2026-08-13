@@ -799,6 +799,60 @@
                 font-size: 0.95rem;
             }
         }
+
+        /* ----- PRICE LIST (service_prices dari Firestore) ----- */
+        #priceGrid {
+            width: 100%;
+        }
+        .price-cat-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin: 38px 0 18px;
+            padding-left: 14px;
+            border-left: 5px solid var(--accent);
+            letter-spacing: -0.01em;
+        }
+        #priceGrid > .price-cat-title:first-child {
+            margin-top: 8px;
+        }
+        .price-card {
+            padding: 22px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .price-card h3 {
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            line-height: 1.35;
+            flex: 1 1 auto;
+        }
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-top: 1px solid var(--gray-200);
+            font-size: 0.9rem;
+        }
+        .price-row span {
+            color: var(--gray-600);
+        }
+        .price-row .price-val {
+            color: var(--primary);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .price-row .price-na {
+            color: #9aa4b2;
+            font-weight: 600;
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
+        .bsi-price-na {
+            color: #9aa4b2 !important;
+        }
     </style>
 </head>
 <body>
@@ -902,52 +956,15 @@
     <section class="services" id="harga" style="background: var(--gray-100);">
         <div class="container">
             <div class="text-center">
-                <h2 class="section-title">Daftar Harga Cuci AC</h2>
+                <h2 class="section-title">Daftar Harga Layanan</h2>
                 <p class="section-sub mx-auto">
                     Harga transparan sesuai jenis layanan dan ukuran PK unit AC Anda.
                 </p>
             </div>
-            <div class="service-grid" style="margin-top: 48px;">
-                <div class="service-card" style="background: var(--white);">
-                    <div class="icon"><i class="fas fa-droplet"></i></div>
-                    <h3>Perawatan Cuci AC</h3>
-                    <p style="margin-bottom: 16px;">Cuci rutin untuk menjaga AC tetap dingin dan bersih.</p>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
-                        <span style="font-size: 0.9rem; color: var(--gray-600);">1/2 PK – 1 PK</span>
-                        <strong style="color: var(--primary);">Rp 80.000</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
-                        <span style="font-size: 0.9rem; color: var(--gray-600);">1.5 PK – 2 PK</span>
-                        <strong style="color: var(--primary);">Rp 100.000</strong>
-                    </div>
-                </div>
-                <div class="service-card" style="background: var(--white);">
-                    <div class="icon"><i class="fas fa-shower"></i></div>
-                    <h3>Semi Cuci Turun</h3>
-                    <p style="margin-bottom: 16px;">Unit diturunkan sebagian untuk pembersihan lebih menyeluruh.</p>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
-                        <span style="font-size: 0.9rem; color: var(--gray-600);">1/2 PK – 1 PK</span>
-                        <strong style="color: var(--primary);">Rp 150.000</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
-                        <span style="font-size: 0.9rem; color: var(--gray-600);">1.5 PK – 2 PK</span>
-                        <strong style="color: var(--primary);">Rp 200.000</strong>
-                    </div>
-                </div>
-                <div class="service-card" style="background: var(--white);">
-                    <div class="icon"><i class="fas fa-spray-can-sparkles"></i></div>
-                    <h3>Deep Cleaning / Cuci Turun</h3>
-                    <p style="margin-bottom: 16px;">Unit diturunkan penuh untuk pembersihan paling maksimal.</p>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
-                        <span style="font-size: 0.9rem; color: var(--gray-600);">1/2 PK – 1 PK</span>
-                        <strong style="color: var(--primary);">Rp 350.000</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-200);">
-                        <span style="font-size: 0.9rem; color: var(--gray-600);">1.5 PK – 2 PK</span>
-                        <strong style="color: var(--primary);">Rp 450.000</strong>
-                    </div>
-                </div>
-            </div>
+            <div id="priceGrid" style="margin-top: 20px;"></div>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--gray-600); opacity: 0.85; margin-top: 20px;">
+                * Layanan bertanda "Hubungi Kami" harga menyesuaikan kondisi unit. Hubungi administrasi untuk penawaran.
+            </p>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 32px;">
                 <div style="background: var(--white); border-radius: 20px; padding: 24px 28px; box-shadow: var(--shadow);">
                     <h4 style="color: var(--primary); margin-bottom: 10px;"><i class="fas fa-shield-alt"></i> Garansi Cuci 1 Bulan</h4>
@@ -1259,41 +1276,145 @@
         };
     </script>
 
-    <!-- ===== BOOKING FORM LOGIC ===== -->
+    <!-- ===== BOOKING FORM LOGIC + DAFTAR HARGA (Firestore service_prices) ===== -->
     <script>
-        const WA_NUMBER = '6281315604197';
+        // Konfigurasi Firestore REST (konsisten dengan __saveOrder)
+        const FIRESTORE_BASE = 'https://firestore.googleapis.com/v1/projects/kitaberkahteknik-aa1f5/databases/(default)/documents';
+        const FIRESTORE_KEY  = 'AIzaSyBtMn5fPXMtnWdwRzh_JyJmfYTcqWg7Bn4';
 
-        const bookingServices = [
-            { id: 'cuci-kecil', name: 'Perawatan Cuci AC (1/2 PK – 1 PK)', price: 80000 },
-            { id: 'cuci-besar', name: 'Perawatan Cuci AC (1.5 PK – 2 PK)', price: 100000 },
-            { id: 'semi-kecil', name: 'Semi Cuci Turun (1/2 PK – 1 PK)', price: 150000 },
-            { id: 'semi-besar', name: 'Semi Cuci Turun (1.5 PK – 2 PK)', price: 200000 },
-            { id: 'deep-kecil', name: 'Deep Cleaning / Cuci Turun (1/2 PK – 1 PK)', price: 350000 },
-            { id: 'deep-besar', name: 'Deep Cleaning / Cuci Turun (1.5 PK – 2 PK)', price: 450000 },
+        // Katalog tetap: 12 layanan / 4 kategori. id = doc id di collection 'service_prices'
+        const SERVICE_CATALOG = [
+            { category: 'Perawatan', items: [
+                { id: 'cuci',      name: 'Perawatan Cuci AC',            has_size: true },
+                { id: 'semi',      name: 'Perawatan Semi Overhaul',      has_size: true },
+                { id: 'deep',      name: 'Perawatan Deep Cleaning',      has_size: true }
+            ]},
+            { category: 'Perbaikan Refrigerant', items: [
+                { id: 'ref1',      name: 'Perbaikan Kebocoran Refrigerant (1 Sisi Kiri/Kanan)', has_size: true },
+                { id: 'ref2',      name: 'Perbaikan Refrigerant (2 Sisi Kiri/Kanan)',           has_size: true }
+            ]},
+            { category: 'Pengecekan & Suku Cadang', items: [
+                { id: 'cek',       name: 'Pengecekan',          has_size: false },
+                { id: 'kapasitor', name: 'Ganti Kapasitor',     has_size: false },
+                { id: 'thermistor',name: 'Ganti Thermistor',    has_size: false },
+                { id: 'sensor',    name: 'Ganti Sensor',        has_size: false }
+            ]},
+            { category: 'Bongkar & Pasang', items: [
+                { id: 'bongkar',   name: 'Bongkar',             has_size: true },
+                { id: 'pasang',    name: 'Pasang',              has_size: true },
+                { id: 'bp',        name: 'Bongkar + Pasang',    has_size: true }
+            ]}
         ];
 
-        const qty = {};
-        bookingServices.forEach(s => qty[s.id] = 0);
+        const WA_NUMBER = '6281315604197';
+
+        // Harga yang dimuat dari Firestore (doc id -> { price_kecil, price_besar, price })
+        window.__prices = {};
+
+        // --- Muat harga dari collection 'service_prices' via REST ---
+        async function loadPrices() {
+            try {
+                const resp = await fetch(FIRESTORE_BASE + '/service_prices?key=' + FIRESTORE_KEY);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const data = await resp.json();
+                (data.documents || []).forEach(doc => {
+                    const id = doc.name.split('/').pop();
+                    const f = doc.fields || {};
+                    const num = v => (v && v.integerValue !== undefined) ? Number(v.integerValue) : 0;
+                    window.__prices[id] = {
+                        price_kecil: num(f.price_kecil),
+                        price_besar: num(f.price_besar),
+                        price: num(f.price)
+                    };
+                });
+            } catch (e) {
+                console.warn('Gagal memuat harga service_prices:', e);
+            }
+            renderPriceList();
+            renderBookingServices();
+            updateTotal();
+        }
+
+        function getPrice(itemId, kind) {
+            const p = window.__prices[itemId] || {};
+            if (kind === 'kecil')  return Number(p.price_kecil || 0);
+            if (kind === 'besar')  return Number(p.price_besar || 0);
+            return Number(p.price || 0);
+        }
 
         function formatRupiah(num) {
-            return 'Rp ' + num.toLocaleString('id-ID');
+            return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
+        }
+
+        // ===== DAFTAR HARGA (#harga) =====
+        function priceText(value) {
+            return value > 0
+                ? '<strong class="price-val">' + formatRupiah(value) + '</strong>'
+                : '<span class="price-na">Hubungi Kami</span>';
+        }
+
+        function renderPriceList() {
+            const grid = document.getElementById('priceGrid');
+            if (!grid) return;
+            let html = '';
+            SERVICE_CATALOG.forEach(cat => {
+                html += '<h3 class="price-cat-title">' + cat.category + '</h3>';
+                html += '<div class="service-grid">';
+                cat.items.forEach(item => {
+                    let rows;
+                    if (item.has_size) {
+                        rows =
+                            '<div class="price-row"><span>1/2 – 1 PK</span>' + priceText(getPrice(item.id, 'kecil')) + '</div>' +
+                            '<div class="price-row"><span>1.5 – 2 PK</span>' + priceText(getPrice(item.id, 'besar')) + '</div>';
+                    } else {
+                        rows = '<div class="price-row"><span>Harga</span>' + priceText(getPrice(item.id, 'single')) + '</div>';
+                    }
+                    html += '<div class="service-card price-card" style="background:var(--white);">' +
+                            '<h3>' + item.name + '</h3>' + rows + '</div>';
+                });
+                html += '</div>';
+            });
+            grid.innerHTML = html;
+        }
+
+        // ===== BOOKING FORM =====
+        let bookingServices = [];
+        const qty = {};
+
+        // Bangun daftar layanan yang bisa dipilih (has_size -> 2 baris: kecil & besar)
+        function buildBookingList() {
+            const list = [];
+            SERVICE_CATALOG.forEach(cat => cat.items.forEach(item => {
+                if (item.has_size) {
+                    list.push({ id: item.id + '-kecil', name: item.name + ' (1/2 – 1 PK)',  price: getPrice(item.id, 'kecil') });
+                    list.push({ id: item.id + '-besar', name: item.name + ' (1.5 – 2 PK)', price: getPrice(item.id, 'besar') });
+                } else {
+                    list.push({ id: item.id, name: item.name, price: getPrice(item.id, 'single') });
+                }
+            }));
+            return list;
         }
 
         function renderBookingServices() {
+            bookingServices = buildBookingList();
+            bookingServices.forEach(s => qty[s.id] = 0);
+
             const wrap = document.getElementById('bookingServices');
-            wrap.innerHTML = bookingServices.map(s => `
-                <div class="booking-service-item">
-                    <div class="bsi-info">
-                        <div class="bsi-name">${s.name}</div>
-                        <div class="bsi-price">${formatRupiah(s.price)}</div>
-                    </div>
-                    <div class="qty-stepper">
-                        <button type="button" data-action="dec" data-id="${s.id}">−</button>
-                        <span class="qty-value" id="qty-${s.id}">0</span>
-                        <button type="button" data-action="inc" data-id="${s.id}">+</button>
-                    </div>
-                </div>
-            `).join('');
+            wrap.innerHTML = bookingServices.map(s =>
+                '<div class="booking-service-item">' +
+                    '<div class="bsi-info">' +
+                        '<div class="bsi-name">' + s.name + '</div>' +
+                        '<div class="bsi-price' + (s.price > 0 ? '' : ' bsi-price-na') + '">' +
+                            (s.price > 0 ? formatRupiah(s.price) : 'Hubungi') +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="qty-stepper">' +
+                        '<button type="button" data-action="dec" data-id="' + s.id + '">−</button>' +
+                        '<span class="qty-value" id="qty-' + s.id + '">0</span>' +
+                        '<button type="button" data-action="inc" data-id="' + s.id + '">+</button>' +
+                    '</div>' +
+                '</div>'
+            ).join('');
 
             wrap.querySelectorAll('button').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1316,9 +1437,6 @@
             return total;
         }
 
-        renderBookingServices();
-        updateTotal();
-
         document.getElementById('bookingForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
@@ -1338,24 +1456,23 @@
             }
 
             const total = updateTotal();
-            let text = `Halo Kita Berkah Teknik, saya ingin booking layanan:\n\n`;
-            text += `Nama: ${name}\n`;
-            text += `No. HP: ${phone}\n`;
-            if (address) text += `Alamat: ${address}\n`;
-            text += `\nLayanan:\n`;
-            chosen.forEach(s => {
-                text += `- ${s.name} x${qty[s.id]} = ${formatRupiah(s.price * qty[s.id])}\n`;
-            });
-            text += `\nEstimasi Total: ${formatRupiah(total)}\n`;
-            if (message) text += `\nCatatan: ${message}\n`;
+            const linePrice = s => s.price > 0 ? formatRupiah(s.price * qty[s.id]) : 'Hubungi';
 
-            const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+            let text = 'Halo Kita Berkah Teknik, saya ingin booking layanan:\n\n';
+            text += 'Nama: ' + name + '\n';
+            text += 'No. HP: ' + phone + '\n';
+            if (address) text += 'Alamat: ' + address + '\n';
+            text += '\nLayanan:\n';
+            chosen.forEach(s => { text += '- ' + s.name + ' x' + qty[s.id] + ' = ' + linePrice(s) + '\n'; });
+            text += '\nEstimasi Total: ' + formatRupiah(total) + '\n';
+            if (message) text += '\nCatatan: ' + message + '\n';
+
+            const url = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
             window.open(url, '_blank');
 
-            // Simpan ke Firestore (collection 'orders') supaya muncul di admin
+            // Simpan ke Firestore (collection 'orders') — tetap pakai __saveOrder yang sudah ada
             if (window.__saveOrder) {
-                const servicesText = chosen.map(s => `- ${s.name} x${qty[s.id]} = ${formatRupiah(s.price * qty[s.id])}`).join('\n');
-                // Umpan balik: cek apakah order berhasil tersimpan
+                const servicesText = chosen.map(s => '- ' + s.name + ' x' + qty[s.id] + ' = ' + linePrice(s)).join('\n');
                 window.__saveOrder({
                     customer_name: name,
                     name: name,
@@ -1378,6 +1495,9 @@
                 console.warn('__saveOrder tidak tersedia — order tidak disimpan ke Firestore');
             }
         });
+
+        // Muat harga dari Firestore, lalu render daftar harga & form booking
+        loadPrices();
     </script>
 
     <!-- ===== HAMBURGER TOGGLE ===== -->
