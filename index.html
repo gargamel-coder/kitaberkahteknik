@@ -175,18 +175,33 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-weight: 800;
             font-size: 1.5rem;
-            color: var(--primary);
             letter-spacing: -0.03em;
+            text-decoration: none;
         }
-        .logo i {
-            font-size: 1.8rem;
-            color: var(--accent);
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.05;
         }
-        .logo span {
-            color: var(--gray-800);
+        .logo-title {
+            color: #00106E;
+            /* biru logo */
+        }
+        .logo-title .accent {
+            color: #A00000;
+        }
+        .logo-sub {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: #A00000;
+            /* merah logo */
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-top: 2px;
+            white-space: nowrap;
         }
 
         .nav-links {
@@ -723,11 +738,16 @@
             gap: 40px;
         }
         .footer-brand .logo {
-            color: #fff;
             margin-bottom: 12px;
         }
-        .footer-brand .logo span {
+        .footer-brand .logo-title {
             color: #fff;
+        }
+        .footer-brand .logo-title .accent {
+            color: #fff;
+        }
+        .footer-brand .logo-sub {
+            color: rgba(255, 255, 255, 0.75);
         }
         .footer-brand p {
             font-size: 0.95rem;
@@ -901,7 +921,10 @@
         <div class="container">
             <a href="#" class="logo">
                 <img src="assets/logo-kbt.png" alt="Logo Kita Berkah Teknik" class="logo-img" />
-                Kita Berkah <span>Teknik</span>
+                <span class="logo-text">
+                    <span class="logo-title">Kita Berkah <span class="accent">Teknik</span></span>
+                    <span class="logo-sub">Kepercayaan Anda Tanggung Jawab Kami</span>
+                </span>
             </a>
             <div class="hamburger" id="hamburger">
                 <i class="fas fa-bars"></i>
@@ -1240,7 +1263,10 @@
             <div class="footer-brand">
                 <a href="#" class="logo">
                     <img src="assets/logo-kbt.png" alt="Logo Kita Berkah Teknik" class="logo-img" />
-                    Kita Berkah <span>Teknik</span>
+                    <span class="logo-text">
+                        <span class="logo-title">Kita Berkah <span class="accent">Teknik</span></span>
+                        <span class="logo-sub">Kepercayaan Anda Tanggung Jawab Kami</span>
+                    </span>
                 </a>
                 <p>Solusi AC profesional untuk hunian dan bisnis Anda. Terpercaya, transparan, dan berkualitas.</p>
             </div>
