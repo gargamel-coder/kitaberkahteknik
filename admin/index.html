@@ -131,11 +131,22 @@ tr:hover td{background:var(--primary-light);}
 .cal-day.has-orders-low{background:#FEF9C3;color:#854D0E;font-weight:700;}
 .cal-day.has-orders-high{background:#DBEAFE;color:#1E40AF;font-weight:700;}
 .cal-day.selected.has-orders-low,.cal-day.selected.has-orders-high{background:var(--primary);color:#fff !important;}
+.cal-day.avail-full{background:#FEE2E2;color:#B91C1C;font-weight:700;}
+.cal-day.avail-almost{background:#FEF3C7;color:#B45309;font-weight:700;}
+.cal-day.selected.avail-full,.cal-day.selected.avail-almost{background:var(--primary);color:#fff !important;}
 .cal-legend{display:flex;align-items:center;gap:14px;margin-top:10px;font-size:0.72rem;color:var(--gray-600);flex-wrap:wrap;}
 .cal-legend-dot{width:12px;height:12px;border-radius:4px;display:inline-block;vertical-align:middle;margin-right:4px;}
 .cal-selected-info{margin-top:12px;padding:12px 14px;background:var(--primary-light);border-radius:14px;font-size:0.82rem;color:var(--gray-800);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .cal-clear{margin-left:auto;padding:5px 12px;border-radius:8px;border:2px solid var(--gray-200);background:var(--white);cursor:pointer;font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--gray-600);transition:all .15s;white-space:nowrap;}
 .cal-clear:hover{border-color:var(--red);color:var(--red);}
+.cal-avail{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.cal-avail-btn{padding:5px 12px;border-radius:20px;border:2px solid var(--gray-200);background:var(--white);cursor:pointer;font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--gray-700);transition:all .15s;white-space:nowrap;}
+.cal-avail-btn:hover{border-color:var(--primary);color:var(--primary);}
+.cal-avail-btn.active-open{background:#D1FAE5;border-color:#10B981;color:#065F46;}
+.cal-avail-btn.active-almost{background:#FEF3C7;border-color:#F59E0B;color:#92400E;}
+.cal-avail-btn.active-full{background:#FEE2E2;border-color:#EF4444;color:#991B1B;}
+.cal-avail-reset{color:var(--gray-500);}
+.cal-avail-reset:hover{border-color:var(--red);color:var(--red);}
 
 /* ORDER CARDS */
 .order-card{background:var(--white);border:1px solid var(--gray-200);border-radius:18px;padding:18px 20px;margin-bottom:12px;transition:box-shadow .2s;}
@@ -271,6 +282,12 @@ tr:hover td{background:var(--primary-light);}
             </div>
             <div class="cal-selected-info" id="cal-selected-info" style="display:none;">
               <span id="cal-selected-text"></span>
+              <div class="cal-avail" id="cal-avail" style="display:none;">
+                <button type="button" class="cal-avail-btn" data-status="open">✓ Buka</button>
+                <button type="button" class="cal-avail-btn" data-status="almost">⚠ Hampir Penuh</button>
+                <button type="button" class="cal-avail-btn" data-status="full">✖ Penuh</button>
+                <button type="button" class="cal-avail-btn cal-avail-reset" data-status="reset">🗑 Hapus Status</button>
+              </div>
               <button class="cal-clear" id="cal-clear">✕ Reset</button>
             </div>
           </div>
@@ -355,6 +372,8 @@ let allOrders = [];
 let allTechs = [];
 let unsubOrders = null;
 let unsubTechs = null;
+let allAvailability = {};   // dateStr -> {status,note}
+let unsubAvailability = null;
 let editingOrderId = null;
 let taskFilter = 'all';        // all | belum | selesai | skip
 let selectedDate = null;       // yyyy-mm-dd, calendar filter
@@ -395,6 +414,7 @@ function doLogout(){
   sessionStorage.removeItem('kbt_admin');
   if(unsubOrders){unsubOrders();unsubOrders=null;}
   if(unsubTechs){unsubTechs();unsubTechs=null;}
+  if(unsubAvailability){unsubAvailability();unsubAvailability=null;}
   currentAdmin=null;
   document.getElementById('dashboard').style.display='none';
   document.getElementById('login-screen').style.display='flex';
@@ -407,6 +427,7 @@ function showDashboard(){
   document.getElementById('hdr-name').textContent='admin';
   listenOrders();
   listenTechs();
+  listenAvailability();
   loadPrices();
 }
 
@@ -428,6 +449,16 @@ function listenTechs(){
     populateTechSelect();
     renderTechs();
     renderOrders();
+  });
+}
+function listenAvailability(){
+  if(unsubAvailability)unsubAvailability();
+  unsubAvailability=onSnapshot(collection(db,'availability'),snap=>{
+    allAvailability={};
+    snap.docs.forEach(dd=>{ allAvailability[dd.id]=dd.data(); });
+    renderCalendar();
+  },err=>{
+    // non-fatal: kalender tetap pakai data order
   });
 }
 
@@ -643,7 +674,10 @@ function renderCalendar(){
     const isToday=dateStr===todayStr;
     const isSelected=selectedDate===dateStr;
     const count=counts[dateStr]||0;
-    const colorClass=count>0?(count>=4?' has-orders-high':' has-orders-low'):'';
+    let colorClass=count>0?(count>=4?' has-orders-high':' has-orders-low'):'';
+    const av=allAvailability[dateStr];
+    if(av&&av.status==='full') colorClass+=' avail-full';
+    else if(av&&av.status==='almost') colorClass+=' avail-almost';
     html+=`<div class="cal-day${isToday?' today':''}${isSelected?' selected':''}${colorClass}" data-date="${dateStr}">${d}</div>`;
   }
   const totalCells=firstDay+daysInMonth;
@@ -660,6 +694,7 @@ function selectCalDate(dateStr){
   if(selectedDate===dateStr){
     selectedDate=null;
     document.getElementById('cal-selected-info').style.display='none';
+    document.getElementById('cal-avail').style.display='none';
     toggleBtn.innerHTML='📅 Filter Tanggal';
     toggleBtn.classList.remove('act');
   }else{
@@ -667,6 +702,7 @@ function selectCalDate(dateStr){
     const d=new Date(dateStr+'T00:00:00');
     document.getElementById('cal-selected-text').textContent='📅 '+d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
     document.getElementById('cal-selected-info').style.display='flex';
+    updateAvailabilityControls(dateStr);
     toggleBtn.innerHTML='📅 '+d.toLocaleDateString('id-ID',{day:'numeric',month:'short'});
     toggleBtn.classList.add('act');
   }
@@ -689,10 +725,42 @@ document.getElementById('cal-next').addEventListener('click',()=>{
 document.getElementById('cal-clear').addEventListener('click',()=>{
   selectedDate=null;
   document.getElementById('cal-selected-info').style.display='none';
+  document.getElementById('cal-avail').style.display='none';
   document.getElementById('cal-toggle').classList.remove('act');
   document.getElementById('cal-toggle').innerHTML='📅 Filter Tanggal';
   document.getElementById('cal-panel').classList.remove('open');
   renderOrders();
+});
+
+// ===== AVAILABILITY: status ketersediaan hari =====
+function updateAvailabilityControls(dateStr){
+  const availBox=document.getElementById('cal-avail');
+  if(!availBox)return;
+  const st=(allAvailability[dateStr]||{}).status||null;
+  availBox.style.display='flex';
+  availBox.querySelectorAll('.cal-avail-btn').forEach(b=>{
+    b.classList.remove('active-open','active-almost','active-full');
+    if(b.dataset.status===st) b.classList.add('active-'+st);
+  });
+}
+async function setAvailability(dateStr,status){
+  await setDoc(doc(db,'availability',dateStr),{status:status,note:''},{merge:true});
+}
+document.querySelectorAll('#cal-avail .cal-avail-btn').forEach(btn=>{
+  btn.addEventListener('click',async()=>{
+    const dt=selectedDate;
+    if(!dt)return;
+    const st=btn.dataset.status;
+    try{
+      if(st==='reset'){
+        await deleteDoc(doc(db,'availability',dt));
+        showToast('🗑 Status hari dihapus.');
+      }else{
+        await setAvailability(dt,st);
+        showToast('✅ Status hari tersimpan: '+(st==='open'?'Buka':st==='almost'?'Hampir Penuh':'Penuh'));
+      }
+    }catch(err){ showToast('⚠️ Gagal simpan status: '+err.message); }
+  });
 });
 
 // EXPORT KE KALENDER (.ics)

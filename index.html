@@ -952,6 +952,120 @@
         .bsi-price-na {
             color: #9aa4b2 !important;
         }
+        /* ===== Kalender Booking Kustom (availability) ===== */
+        .cal-wrap {
+            margin-top: 6px;
+            border: 1px solid #dde3ea;
+            border-radius: 12px;
+            padding: 12px;
+            background: #fbfcfe;
+            font-family: var(--font);
+        }
+        .cal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .cal-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+        .cal-nav {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--primary);
+            background: #fff;
+            color: var(--primary);
+            border-radius: 8px;
+            font-size: 1rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .cal-nav:hover { background: var(--primary); color: #fff; }
+        .cal-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #6b7686;
+            margin-bottom: 4px;
+        }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: #fff;
+            color: #1f2937;
+            transition: background .15s, border-color .15s;
+        }
+        .cal-day:hover:not(.disabled):not(.full) { background: #e7f0fb; }
+        .cal-day.blank { pointer-events: none; background: transparent; }
+        .cal-day.disabled {
+            background: #eef1f4;
+            color: #b6bec9;
+            cursor: not-allowed;
+        }
+        .cal-day.open { background: #fff; }
+        .cal-day.almost {
+            background: #fff3e0;
+            color: #b26a00;
+        }
+        .cal-day.full {
+            background: #ffebee;
+            color: #c62828;
+            cursor: not-allowed;
+        }
+        .cal-day.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+        .cal-status {
+            margin-top: 8px;
+            min-height: 18px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #6b7686;
+        }
+        .cal-status.warn { color: #b26a00; }
+        .cal-status.err { color: #c62828; }
+        .cal-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: #6b7686;
+        }
+        .cal-legend span { display: inline-flex; align-items: center; gap: 5px; }
+        .cal-legend .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .dot-open { background: #fff; border: 1px solid #c3ccd6; }
+        .dot-almost { background: #ffb74d; }
+        .dot-full { background: #e57373; }
+        .cal-hint {
+            font-size: 0.72rem;
+            color: #8a94a3;
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
@@ -1276,7 +1390,25 @@
 
                     <div class="form-group">
                         <label for="bookingDate">📅 Tanggal Layanan</label>
-                        <input type="date" id="bookingDate" />
+                        <div id="bookingDateWrap" class="cal-wrap">
+                            <div class="cal-header">
+                                <button type="button" class="cal-nav" id="calPrev" aria-label="Bulan sebelumnya">‹</button>
+                                <span class="cal-title" id="calTitle"></span>
+                                <button type="button" class="cal-nav" id="calNext" aria-label="Bulan berikutnya">›</button>
+                            </div>
+                            <div class="cal-weekdays">
+                                <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+                            </div>
+                            <div class="cal-grid" id="calGrid"></div>
+                            <div class="cal-status" id="calStatus"></div>
+                            <div class="cal-legend">
+                                <span><i class="dot dot-full"></i>Penuh</span>
+                                <span><i class="dot dot-almost"></i>Terbatas</span>
+                                <span><i class="dot dot-open"></i>Buka</span>
+                            </div>
+                            <div class="cal-hint">Klik tanggal untuk memilih. Tanggal merah tidak dapat dipilih.</div>
+                            <input type="hidden" id="bookingDate" />
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -1655,8 +1787,127 @@
             }
         });
 
+        // ===== KALENDER BOOKING (availability via REST) =====
+        // statusMap: 'yyyy-mm-dd' -> 'full' | 'almost' (nilai string di fields.status)
+        window.__availability = {};
+        let calCursor = new Date();
+        // Normalisasi ke awal hari lokal agar konsisten dengan yyyy-mm-dd
+        calCursor.setHours(0, 0, 0, 0);
+
+        function toDateStr(d) {
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return d.getFullYear() + '-' + m + '-' + day;
+        }
+
+        async function fetchAvailability() {
+            try {
+                const resp = await fetch(FIRESTORE_BASE + '/availability?key=' + FIRESTORE_KEY);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const data = await resp.json();
+                (data.documents || []).forEach(doc => {
+                    const id = doc.name.split('/').pop();
+                    const f = doc.fields || {};
+                    const st = (f.status && f.status.stringValue) ? f.status.stringValue : '';
+                    window.__availability[id] = st;
+                });
+            } catch (e) {
+                console.warn('Gagal memuat availability:', e);
+            }
+        }
+
+        const CAL_MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        function renderAvailabilityCalendar() {
+            const grid = document.getElementById('calGrid');
+            const titleEl = document.getElementById('calTitle');
+            if (!grid || !titleEl) return;
+
+            titleEl.textContent = CAL_MONTHS[calCursor.getMonth()] + ' ' + calCursor.getFullYear();
+
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const first = new Date(calCursor.getFullYear(), calCursor.getMonth(), 1);
+            const startDow = (first.getDay() + 6) % 7; // Senin = 0
+            const daysInMonth = new Date(calCursor.getFullYear(), calCursor.getMonth() + 1, 0).getDate();
+            const selectedVal = document.getElementById('bookingDate').value;
+
+            let html = '';
+            for (let i = 0; i < startDow; i++) html += '<div class="cal-day blank"></div>';
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const d = new Date(calCursor.getFullYear(), calCursor.getMonth(), day);
+                d.setHours(0, 0, 0, 0);
+                const ds = toDateStr(d);
+                const st = window.__availability[ds] || '';
+                const isPast = d < today;
+                const isFull = st === 'full';
+                const isAlmost = st === 'almost';
+                const clickable = !isPast && !isFull;
+
+                let cls = 'cal-day';
+                if (isPast || isFull) cls += ' disabled';
+                if (isFull) cls += ' full';
+                else if (isAlmost) cls += ' almost';
+                else if (!isPast) cls += ' open';
+                if (ds === selectedVal) {
+                    cls += ' selected';
+                }
+
+                html += '<button type="button" class="' + cls.trim() + '" data-date="' + ds + '"' +
+                    (isFull ? ' title="Tanggal penuh — tidak tersedia"' : '') + '>' + day + '</button>';
+            }
+            grid.innerHTML = html;
+
+            grid.querySelectorAll('.cal-day').forEach(btn => {
+                if (btn.classList.contains('blank')) return;
+                btn.addEventListener('click', function () {
+                    const ds = this.dataset.date;
+                    const st = window.__availability[ds] || '';
+                    const d = new Date(ds + 'T00:00:00'); d.setHours(0, 0, 0, 0);
+                    const statusEl = document.getElementById('calStatus');
+
+                    // Tolak hari penuh / masa lalu (tombol dinonaktifkan, tapi jaga-jaga)
+                    if (st === 'full' || d < today) {
+                        statusEl.className = 'cal-status err';
+                        statusEl.textContent = st === 'full'
+                            ? '✖ ' + fmtShortDate(d) + ' sudah penuh. Pilih tanggal lain.'
+                            : '✖ Tidak bisa memilih tanggal di masa lalu.';
+                        return;
+                    }
+
+                    // Set hidden input (format yyyy-mm-dd) — logika submit tetap bekerja
+                    document.getElementById('bookingDate').value = ds;
+
+                    grid.querySelectorAll('.cal-day').forEach(x => x.classList.remove('selected'));
+                    this.classList.add('selected');
+
+                    if (st === 'almost') {
+                        statusEl.className = 'cal-status warn';
+                        statusEl.textContent = '⚠ ' + fmtShortDate(d) + ' hanya tersisa sedikit slot. Segera konfirmasi.';
+                    } else {
+                        statusEl.className = 'cal-status';
+                        statusEl.textContent = '✓ Tanggal dipilih: ' + fmtShortDate(d);
+                    }
+                });
+            });
+        }
+
+        function fmtShortDate(d) {
+            return d.getDate() + ' ' + CAL_MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+        }
+
+        const calPrev = document.getElementById('calPrev');
+        const calNext = document.getElementById('calNext');
+        if (calPrev) calPrev.addEventListener('click', () => { calCursor.setMonth(calCursor.getMonth() - 1); renderAvailabilityCalendar(); });
+        if (calNext) calNext.addEventListener('click', () => { calCursor.setMonth(calCursor.getMonth() + 1); renderAvailabilityCalendar(); });
+
         // Muat harga dari Firestore, lalu render daftar harga & form booking
         loadPrices();
+        // Muat status availability lalu render kalender booking
+        (async function initCalendar() {
+            await fetchAvailability();
+            renderAvailabilityCalendar();
+        })();
     </script>
 
     <!-- ===== HAMBURGER TOGGLE ===== -->
