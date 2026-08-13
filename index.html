@@ -954,12 +954,48 @@
         }
         /* ===== Kalender Booking Kustom (availability) ===== */
         .cal-wrap {
-            margin-top: 6px;
+            margin-top: 8px;
             border: 1px solid #dde3ea;
             border-radius: 12px;
             padding: 12px;
             background: #fbfcfe;
             font-family: var(--font);
+            display: none;
+        }
+        .cal-wrap.open {
+            display: block;
+            animation: fadeIn .2s ease;
+        }
+        .cal-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 16px;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            background: #fff;
+            color: var(--primary);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            transition: all .15s;
+            width: 100%;
+            justify-content: center;
+        }
+        .cal-toggle-btn:hover {
+            background: var(--primary-light);
+        }
+        .cal-toggle-btn.act {
+            background: var(--primary);
+            color: #fff;
+        }
+        .cal-chosen {
+            margin-top: 8px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--primary);
+            min-height: 18px;
         }
         .cal-header {
             display: flex;
@@ -1390,6 +1426,7 @@
 
                     <div class="form-group">
                         <label for="bookingDate">📅 Tanggal Layanan</label>
+                        <button type="button" class="cal-toggle-btn" id="calToggleBtn">📅 Pilih Tanggal</button>
                         <div id="bookingDateWrap" class="cal-wrap">
                             <div class="cal-header">
                                 <button type="button" class="cal-nav" id="calPrev" aria-label="Bulan sebelumnya">‹</button>
@@ -1409,6 +1446,7 @@
                             <div class="cal-hint">Klik tanggal untuk memilih. Tanggal merah tidak dapat dipilih.</div>
                             <input type="hidden" id="bookingDate" />
                         </div>
+                        <div class="cal-chosen" id="calChosen"></div>
                     </div>
 
                     <div class="form-group">
@@ -1881,6 +1919,10 @@
                     grid.querySelectorAll('.cal-day').forEach(x => x.classList.remove('selected'));
                     this.classList.add('selected');
 
+                    // Tampilkan tanggal terpilih di bawah tombol
+                    const chosenEl = document.getElementById('calChosen');
+                    if (chosenEl) chosenEl.textContent = '📅 Terpilih: ' + fmtShortDate(d);
+
                     if (st === 'almost') {
                         statusEl.className = 'cal-status warn';
                         statusEl.textContent = '⚠ ' + fmtShortDate(d) + ' hanya tersisa sedikit slot. Segera konfirmasi.';
@@ -1900,6 +1942,18 @@
         const calNext = document.getElementById('calNext');
         if (calPrev) calPrev.addEventListener('click', () => { calCursor.setMonth(calCursor.getMonth() - 1); renderAvailabilityCalendar(); });
         if (calNext) calNext.addEventListener('click', () => { calCursor.setMonth(calCursor.getMonth() + 1); renderAvailabilityCalendar(); });
+
+        // Toggle: kalender muncul saat tombol "Pilih Tanggal" diklik
+        const calToggleBtn = document.getElementById('calToggleBtn');
+        const calWrapEl = document.getElementById('bookingDateWrap');
+        if (calToggleBtn && calWrapEl) {
+            calToggleBtn.addEventListener('click', () => {
+                const open = calWrapEl.classList.toggle('open');
+                calToggleBtn.classList.toggle('act', open);
+                calToggleBtn.textContent = open ? '✕ Tutup Tanggal' : '📅 Pilih Tanggal';
+                if (open) renderAvailabilityCalendar();
+            });
+        }
 
         // Muat harga dari Firestore, lalu render daftar harga & form booking
         loadPrices();
