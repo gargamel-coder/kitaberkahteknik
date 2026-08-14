@@ -364,7 +364,7 @@ tr:hover td{background:var(--primary-light);}
 <!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { initializeFirestore, collection, query, orderBy, onSnapshot, getDocs, doc, addDoc, setDoc, updateDoc, deleteDoc, serverTimestamp }
+import { initializeFirestore, collection, query, orderBy, onSnapshot, getDocs, getDoc, doc, addDoc, setDoc, updateDoc, deleteDoc, serverTimestamp }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -1031,9 +1031,23 @@ document.getElementById('btn-login').addEventListener('click',doLogin);
 document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('btn-logout').addEventListener('click',doLogout);
 
-(function(){
-  try{const s=sessionStorage.getItem('kbt_admin');if(s){currentAdmin=JSON.parse(s);showDashboard();}}catch(e){}
-})();
+// Auto-login persisten: jika Firebase Auth masih login & user punya akses admin
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('dashboard').style.display='none';
+    return;
+  }
+  // Verifikasi lagi akses admin via admin_users
+  try {
+    const snap2 = await getDoc(doc(db,'admin_users',user.uid));
+    const d2 = snap2.exists() ? snap2.data() : null;
+    if (!snap2.exists() || d2.role !== 'admin') return;
+    currentAdmin = { uid: user.uid, email: user.email };
+    sessionStorage.setItem('kbt_admin', JSON.stringify(currentAdmin));
+    showDashboard();
+  } catch(e) { /* ignore */ }
+});
 </script>
 
 </body>
