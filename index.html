@@ -1262,7 +1262,7 @@
             padding: 12px;
             background: #fbfcfe;
             font-family: var(--font);
-            display: none;
+            display: block;
         }
         .cal-wrap.open {
             display: block;
@@ -1746,27 +1746,6 @@
 
                 <div class="booking-contact-cards">
                     <div class="bcc-item">
-                        <div class="bcc-icon"><i class="fas fa-phone-alt"></i></div>
-                        <div>
-                            <div class="bcc-main">0813-1560-4197</div>
-                            <div class="bcc-sub">Chat via WhatsApp</div>
-                        </div>
-                    </div>
-                    <div class="bcc-item">
-                        <div class="bcc-icon"><i class="fas fa-envelope"></i></div>
-                        <div>
-                            <div class="bcc-main">ptkitaberkahteknik@gmail.com</div>
-                            <div class="bcc-sub">Kirim email</div>
-                        </div>
-                    </div>
-                    <div class="bcc-item">
-                        <div class="bcc-icon"><i class="fas fa-map-marker-alt"></i></div>
-                        <div>
-                            <div class="bcc-main">Jakarta</div>
-                            <div class="bcc-sub">Lihat di Maps</div>
-                        </div>
-                    </div>
-                    <div class="bcc-item">
                         <div class="bcc-icon"><i class="fas fa-clock"></i></div>
                         <div>
                             <div class="bcc-main">Senin – Minggu (Jumat libur)</div>
@@ -1812,7 +1791,6 @@
 
                     <div class="form-group">
                         <label for="bookingDate">📅 Tanggal Layanan</label>
-                        <button type="button" class="cal-toggle-btn" id="calToggleBtn">📅 Pilih Tanggal</button>
                         <div id="bookingDateWrap" class="cal-wrap">
                             <div class="cal-header">
                                 <button type="button" class="cal-nav" id="calPrev" aria-label="Bulan sebelumnya">‹</button>
@@ -1820,7 +1798,7 @@
                                 <button type="button" class="cal-nav" id="calNext" aria-label="Bulan berikutnya">›</button>
                             </div>
                             <div class="cal-weekdays">
-                                <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+                                <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
                             </div>
                             <div class="cal-grid" id="calGrid"></div>
                             <div class="cal-status" id="calStatus"></div>
@@ -1891,16 +1869,10 @@
                 </ul>
             </div>
             <div>
-                <h4>Hubungi Kami</h4>
+                <h4>Jam Layanan</h4>
                 <ul>
-                    <li><i class="fas fa-phone" style="width:20px;"></i> 0813-1560-4197</li>
-                    <li><i class="fas fa-envelope" style="width:20px;"></i> ptkitaberkahteknik@gmail.com</li>
-                    <li><i class="fas fa-map-marker-alt" style="width:20px;"></i> Jl. Lontar Dalam No 38 D RT 003 RW 004, Tugu Utara, Koja, Jakarta Utara 14260</li>
-                    <li style="display: flex; gap: 12px; margin-top: 8px;">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="https://wa.me/6281315604197" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
-                    </li>
+                    <li><i class="fas fa-clock" style="width:20px;"></i> Senin – Minggu (Jumat libur)</li>
+                    <li><i class="fas fa-calendar-check" style="width:20px;"></i> 08.00 – 17.00</li>
                 </ul>
             </div>
         </div>
@@ -2330,21 +2302,9 @@
         if (calPrev) calPrev.addEventListener('click', () => { calCursor.setMonth(calCursor.getMonth() - 1); renderAvailabilityCalendar(); });
         if (calNext) calNext.addEventListener('click', () => { calCursor.setMonth(calCursor.getMonth() + 1); renderAvailabilityCalendar(); });
 
-        // Toggle: kalender muncul saat tombol "Pilih Tanggal" diklik
-        const calToggleBtn = document.getElementById('calToggleBtn');
-        const calWrapEl = document.getElementById('bookingDateWrap');
-        if (calToggleBtn && calWrapEl) {
-            calToggleBtn.addEventListener('click', () => {
-                const open = calWrapEl.classList.toggle('open');
-                calToggleBtn.classList.toggle('act', open);
-                calToggleBtn.textContent = open ? '✕ Tutup Tanggal' : '📅 Pilih Tanggal';
-                if (open) renderAvailabilityCalendar();
-            });
-        }
-
         // Muat harga dari Firestore, lalu render daftar harga & form booking
         loadPrices();
-        // Muat status availability lalu render kalender booking
+        // Muat status availability lalu render kalender booking (selalu tampil)
         (async function initCalendar() {
             await fetchAvailability();
             renderAvailabilityCalendar();
