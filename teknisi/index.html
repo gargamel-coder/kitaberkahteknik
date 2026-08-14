@@ -445,19 +445,6 @@ function buildTaskCard(o){
 
   const services=esc(o.services_text||o.services||o.detail||'');
 
-  const rawPhone=(o.phone||'').replace(/\D/g,'');
-  const callHtml=rawPhone
-    ?`<a class="qa-btn qa-call" href="tel:${rawPhone}">📞 Telepon</a>`
-    :'';
-  const waNum=rawPhone.replace(/^0/,'62');
-  const waHtml=rawPhone
-    ?`<a class="qa-btn qa-wa" href="https://wa.me/${waNum}" target="_blank" rel="noopener">💬 WhatsApp</a>`
-    :'';
-  const mapsQuery=encodeURIComponent(o.address||'');
-  const mapsHtml=o.address
-    ?`<a class="qa-btn qa-map" href="https://www.google.com/maps/search/?api=1&query=${mapsQuery}" target="_blank" rel="noopener">🗺️ Navigasi</a>`
-    :'';
-
   let actionHtml='';
   if(status==='belum'){
     actionHtml=`<button class="btn-selesai" data-id="${safeId}" data-status="selesai">✅ Tandai Selesai</button>
@@ -481,7 +468,6 @@ function buildTaskCard(o){
       <div class="full"><b>${esc(o.service_type||'Layanan belum diisi')}</b></div>
     </div>
     ${services?`<div class="task-services">${services}</div>`:''}
-    <div class="quick-actions">${callHtml}${waHtml}${mapsHtml}</div>
     <div class="task-foot">
       <div class="task-actions">${actionHtml}</div>
     </div>
