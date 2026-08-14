@@ -242,6 +242,7 @@ tr:hover td{background:var(--primary-light);}
       <button class="tab-btn act" data-tab="orders">📋 Pesanan</button>
       <button class="tab-btn" data-tab="technicians">👷 Teknisi</button>
       <button class="tab-btn" data-tab="prices">💲 Harga Layanan</button>
+      <button class="tab-btn" data-tab="rekap">📊 Rekap</button>
     </div>
 
     <!-- ORDERS -->
@@ -352,6 +353,36 @@ tr:hover td{background:var(--primary-light);}
         <div id="price-form"></div>
         <button class="create-btn" id="save-all-prices">💾 Simpan Semua Harga</button>
         <div class="form-msg" id="priceMsg"></div>
+      </div>
+    </div>
+
+    <!-- REKAP -->
+    <div class="tab-pane" id="pane-rekap">
+      <div class="stat-row">
+        <div class="stat-c green"><div class="s-num" id="rekap-today">Rp0</div><div class="s-lbl">Pendapatan Hari Ini</div></div>
+        <div class="stat-c green"><div class="s-num" id="rekap-month">Rp0</div><div class="s-lbl">Pendapatan Bulan Ini</div></div>
+        <div class="stat-c green"><div class="s-num" id="rekap-total">Rp0</div><div class="s-lbl">Total Pendapatan (Selesai)</div></div>
+      </div>
+
+      <div class="panels">
+        <div class="panel">
+          <div class="panel-title">📅 Ringkasan per Hari (Hari Ini)</div>
+          <div id="rekap-daily"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">🗓️ Ringkasan per Bulan</div>
+          <div id="rekap-monthly"></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:22px;">
+        <div class="panel-title">✅ Pesanan Selesai (Dikonfirmasi)</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Tanggal</th><th>Nama</th><th>Layanan</th><th>Total</th></tr></thead>
+            <tbody id="rekap-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -516,6 +547,83 @@ function renderOrdersStats(){
   document.getElementById('stat-skip').textContent=skip;
   document.getElementById('stat-tech').textContent=active;
 }
+function fmtIDR(n){
+  const v=Math.round(Number(n)||0);
+  return 'Rp'+v.toLocaleString('id-ID');
+}
+function renderRekap(){
+  // Pendapatan = total_estimate dari order yang task_status==='selesai' (dikonfirmasi)
+  const done=allOrders.filter(o=>o.task_status==='selesai'&&(Number(o.total_estimate)>0));
+  const now=new Date();
+  const todayStr=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  const monthStr=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+
+  let sumToday=0,sumMonth=0,sumTotal=0;
+  const dailyMap={};   // dateStr -> {count,total}
+  const monthMap={};   // yyyy-mm -> {count,total}
+  const rows=[];
+
+  done.forEach(o=>{
+    const ds=getOrderDateStr(o)||'—';
+    const total=Number(o.total_estimate)||0;
+    sumTotal+=total;
+    if(ds===todayStr) sumToday+=total;
+    if(ds&&ds.slice(0,7)===monthStr) sumMonth+=total;
+
+    if(!dailyMap[ds]) dailyMap[ds]={count:0,total:0};
+    dailyMap[ds].count++; dailyMap[ds].total+=total;
+    const mk=ds.slice(0,7);
+    if(!monthMap[mk]) monthMap[mk]={count:0,total:0};
+    monthMap[mk].count++; monthMap[mk].total+=total;
+
+    rows.push({ds,
+      name:o.customer_name||o.name||'—',
+      svc:o.service_type||o.services_text||o.detail||'—',
+      total});
+  });
+
+  document.getElementById('rekap-today').textContent=fmtIDR(sumToday);
+  document.getElementById('rekap-month').textContent=fmtIDR(sumMonth);
+  document.getElementById('rekap-total').textContent=fmtIDR(sumTotal);
+
+  // Ringkasan per hari (hari ini)
+  const daily=document.getElementById('rekap-daily');
+  if(dailyMap[todayStr]){
+    const d=dailyMap[todayStr];
+    daily.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+        <span style="font-size:0.82rem;color:var(--gray-600);">${new Date(todayStr+'T00:00:00').toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</span>
+        <span style="font-weight:700;color:var(--primary);">${d.count} pesanan · ${fmtIDR(d.total)}</span>
+      </div>`;
+  }else{
+    daily.innerHTML='<div class="empty-state"><div class="empty-ico">📭</div>Belum ada pesanan selesai hari ini.</div>';
+  }
+
+  // Ringkasan per bulan
+  const monthly=document.getElementById('rekap-monthly');
+  const mkList=Object.keys(monthMap).sort().reverse();
+  if(mkList.length){
+    monthly.innerHTML=mkList.map(mk=>{
+      const m=monthMap[mk];
+      const [yy,mm]=mk.split('-');
+      const lbl=new Date(yy,mm-1,1).toLocaleDateString('id-ID',{month:'long',year:'numeric'});
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--gray-200);font-size:0.82rem;">
+        <span>${lbl}</span><span style="font-weight:700;color:var(--primary);">${m.count} pesanan · ${fmtIDR(m.total)}</span></div>`;
+    }).join('');
+  }else{
+    monthly.innerHTML='<div class="empty-state"><div class="empty-ico">🗓️</div>Belum ada data.</div>';
+  }
+
+  // Tabel pesanan selesai
+  const tbody=document.getElementById('rekap-tbody');
+  if(rows.length){
+    tbody.innerHTML=rows.map(r=>{
+      const dd=r.ds==='—'?'—':new Date(r.ds+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+      return `<tr><td>${esc(dd)}</td><td>${esc(r.name)}</td><td>${esc(r.svc)}</td><td style="font-weight:700;color:var(--green);">${fmtIDR(r.total)}</td></tr>`;
+    }).join('');
+  }else{
+    tbody.innerHTML='<tr><td colspan="4" class="empty-state"><div class="empty-ico">✅</div>Belum ada pesanan selesai.</td></tr>';
+  }
+}
 function techName(id){
   const t=allTechs.find(x=>x.tech_id===id);
   return t?t.name:(id||'—');
@@ -541,6 +649,7 @@ function quickActionsHtml(o,st){
 
 function renderOrders(){
   renderOrdersStats();
+  renderRekap();
   const q=document.getElementById('search-orders').value.toLowerCase();
   let list=allOrders;
 
