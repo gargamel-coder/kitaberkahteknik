@@ -211,9 +211,9 @@ tr:hover td{background:var(--primary-light);}
         <span class="login-sub-title">Kepercayaan Anda Tanggung Jawab Kami</span>
       </div>
     </div>
-    <p class="login-sub">Masuk dengan username &amp; password admin</p>
-    <label class="l-label">Username</label>
-    <input class="l-input" id="l-user" placeholder="admin">
+    <p class="login-sub">Masuk dengan email &amp; password admin</p>
+    <label class="l-label">Email</label>
+    <input class="l-input" id="l-user" type="email" placeholder="email@admin.com">
     <label class="l-label">Password</label>
     <input class="l-input" id="l-pass" type="password" placeholder="Password admin">
     <button class="l-btn" id="btn-login">Masuk</button>
@@ -366,6 +366,8 @@ tr:hover td{background:var(--primary-light);}
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { initializeFirestore, collection, query, orderBy, onSnapshot, getDocs, doc, addDoc, setDoc, updateDoc, deleteDoc, serverTimestamp }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 // ===== KONFIGURASI FIREBASE — ganti dengan proyek kita berkah teknik kamu =====
 const firebaseConfig = {
@@ -379,10 +381,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db  = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
-
-// GANTI dengan password admin kamu (dipakai untuk login)
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'kbtadmin2026';
+const auth = getAuth(app);
 
 // STATE
 let currentAdmin = null;
@@ -416,19 +415,42 @@ function getOrderDateStr(o){
 }
 
 // AUTH
-function doLogin(){
-  const u=document.getElementById('l-user').value.trim();
-  const p=document.getElementById('l-pass').value;
+async function doLogin(){
+  const email=document.getElementById('l-user').value.trim();
+  const pass=document.getElementById('l-pass').value;
   const errEl=document.getElementById('l-err');
+  const btn=document.getElementById('btn-login');
   errEl.textContent='';
-  if(!u||!p){errEl.textContent='Username dan password wajib diisi.';return;}
-  if(u!==ADMIN_USER||p!==ADMIN_PASS){errEl.textContent='Username / password salah.';return;}
-  currentAdmin={user:u};
-  sessionStorage.setItem('kbt_admin',JSON.stringify(currentAdmin));
-  showDashboard();
+  if(!email||!pass){errEl.textContent='Email dan password wajib diisi.';return;}
+  btn.disabled=true;
+  btn.textContent='Memverifikasi...';
+  try{
+    const cred=await signInWithEmailAndPassword(auth,email,pass);
+    const user=cred.user;
+    // Verifikasi akses admin via collection admin_users (doc id = UID, field role)
+    const snap=await getDoc(doc(db,'admin_users',user.uid));
+    const data=snap.exists()?snap.data():null;
+    if(!snap.exists()||data.role!=='admin'){
+      alert('Akun tidak punya akses admin');
+      await signOut(auth);
+      if(unsubOrders){unsubOrders();unsubOrders=null;}
+      if(unsubTechs){unsubTechs();unsubTechs=null;}
+      if(unsubAvailability){unsubAvailability();unsubAvailability=null;}
+      return;
+    }
+    currentAdmin={uid:user.uid,email:user.email};
+    sessionStorage.setItem('kbt_admin',JSON.stringify(currentAdmin));
+    showDashboard();
+  }catch(e){
+    errEl.textContent='Email atau password salah.';
+  }finally{
+    btn.disabled=false;
+    btn.textContent='Masuk';
+  }
 }
 function doLogout(){
   if(!confirm('Keluar dari admin dashboard?'))return;
+  signOut(auth).catch(()=>{});
   sessionStorage.removeItem('kbt_admin');
   if(unsubOrders){unsubOrders();unsubOrders=null;}
   if(unsubTechs){unsubTechs();unsubTechs=null;}
@@ -440,9 +462,11 @@ function doLogout(){
   document.getElementById('btn-login').textContent='Masuk';
 }
 function showDashboard(){
+  const s=JSON.parse(sessionStorage.getItem('kbt_admin')||'null');
+  const hdr=document.getElementById('hdr-name');
+  if(s&&s.email){hdr.textContent=s.email;}else if(s&&s.uid){hdr.textContent=s.uid;}else{hdr.textContent='admin';}
   document.getElementById('login-screen').style.display='none';
   document.getElementById('dashboard').style.display='block';
-  document.getElementById('hdr-name').textContent='admin';
   listenOrders();
   listenTechs();
   listenAvailability();
