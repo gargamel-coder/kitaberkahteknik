@@ -23,8 +23,11 @@ button{font-family:'Inter',sans-serif;}
 /* LOGIN */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,#f1f7fe 0%,#fff 100%);padding:20px;}
 .login-card{background:var(--white);border-radius:24px;padding:44px 36px;box-shadow:var(--shadow);width:100%;max-width:400px;text-align:center;}
-.login-logo{font-size:1.7rem;font-weight:800;color:var(--primary);margin-bottom:4px;}
-.login-logo span{color:var(--gray-800);}
+.login-logo{display:flex;align-items:center;justify-content:center;gap:12px;font-weight:800;letter-spacing:-0.02em;}
+.login-logo-img{width:52px;height:52px;border-radius:50%;object-fit:cover;}
+.login-text{display:flex;flex-direction:column;align-items:flex-start;text-align:left;line-height:1.08;}
+.login-title{font-size:1.5rem;color:#00106E;}
+.login-sub-title{font-size:0.62rem;font-weight:600;color:#A00000;letter-spacing:0.04em;text-transform:uppercase;margin-top:2px;white-space:nowrap;}
 .login-badge{display:inline-block;background:var(--primary-light);color:var(--primary);font-weight:600;padding:4px 14px;border-radius:100px;font-size:0.75rem;margin-bottom:8px;letter-spacing:0.3px;}
 .login-sub{font-size:0.85rem;color:var(--gray-600);margin-bottom:28px;}
 .l-label{font-size:0.8rem;font-weight:600;display:block;text-align:left;margin-bottom:6px;}
@@ -38,8 +41,11 @@ button{font-family:'Inter',sans-serif;}
 /* DASHBOARD */
 #dashboard{display:none;}
 header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:15px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
-.hdr-logo{font-size:1.25rem;font-weight:800;color:var(--primary);}
-.hdr-logo span{color:var(--gray-800);}
+.hdr-logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-0.02em;}
+.hdr-logo-img{width:38px;height:38px;border-radius:50%;object-fit:cover;}
+.hdr-logoinfo{display:flex;flex-direction:column;line-height:1.05;}
+.hdr-logotitle{font-size:1.1rem;color:#00106E;}
+.hdr-logofoot{font-size:0.56rem;font-weight:600;color:#A00000;letter-spacing:0.04em;text-transform:uppercase;margin-top:2px;white-space:nowrap;}
 .hdr-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
 .hdr-user{font-size:0.82rem;color:var(--gray-600);}
 .logout-btn{padding:8px 18px;border-radius:100px;background:transparent;border:2px solid var(--gray-200);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;}
@@ -149,7 +155,13 @@ header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:1
 <div id="login-screen">
   <div class="login-card">
     <div class="login-badge">PORTAL TEKNISI</div>
-    <div class="login-logo">Kita Berkah <span>Teknik</span></div>
+    <div class="login-logo">
+      <img src="../assets/logo-kbt.png" alt="Logo Kita Berkah Teknik" class="login-logo-img" />
+      <div class="login-text">
+        <span class="login-title">Kita Berkah Teknik</span>
+        <span class="login-sub-title">Kepercayaan Anda Tanggung Jawab Kami</span>
+      </div>
+    </div>
     <p class="login-sub">Masuk dengan ID &amp; password teknisi kamu</p>
     <label class="l-label">ID Teknisi</label>
     <input class="l-input" id="l-id" placeholder="Contoh: T001" maxlength="20">
@@ -163,7 +175,13 @@ header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:1
 <!-- DASHBOARD -->
 <div id="dashboard">
   <header>
-    <div class="hdr-logo">Kita Berkah <span>Teknik</span></div>
+    <div class="hdr-logo">
+      <img src="../assets/logo-kbt.png" alt="Logo Kita Berkah Teknik" class="hdr-logo-img" />
+      <div class="hdr-logoinfo">
+        <span class="hdr-logotitle">Kita Berkah Teknik</span>
+        <span class="hdr-logofoot">Kepercayaan Anda Tanggung Jawab Kami</span>
+      </div>
+    </div>
     <div class="hdr-right">
       <span class="hdr-user" id="hdr-name">—</span>
       <button class="logout-btn" id="btn-logout">Keluar</button>
