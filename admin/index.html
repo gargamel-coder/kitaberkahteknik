@@ -267,6 +267,9 @@ tr:hover td{background:var(--primary-light);}
             <div class="fg"><label class="fl">Detail / catatan</label><textarea class="fi" id="o-detail" placeholder="Ringkasan layanan, jumlah unit, dll."></textarea></div>
             <div class="fr2">
               <div class="fg"><label class="fl">Tanggal Jadwal</label><input class="fi" id="o-date" type="date"></div>
+              <div class="fg"><label class="fl">Estimasi Biaya (Rp)</label><input class="fi" id="o-estimate" type="number" min="0" placeholder="0"></div>
+            </div>
+            <div class="fr2">
               <div class="fg"><label class="fl">Assign Teknisi</label><select class="fs" id="o-assign"><option value="">— pilih —</option></select></div>
             </div>
             <button type="submit" class="create-btn">Simpan Pesanan</button>
@@ -553,7 +556,7 @@ function fmtIDR(n){
 }
 function renderRekap(){
   // Pendapatan = total_estimate dari order yang task_status==='selesai' (dikonfirmasi)
-  const done=allOrders.filter(o=>o.task_status==='selesai'&&(Number(o.total_estimate)>0));
+  const done=allOrders.filter(o=>o.task_status==='selesai');
   const now=new Date();
   const todayStr=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
   const monthStr=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
@@ -732,6 +735,7 @@ function renderOrders(){
         document.getElementById('o-service').value=o.service_type||'';
         document.getElementById('o-detail').value=o.services_text||o.services||o.detail||'';
         document.getElementById('o-date').value=o.scheduled_date||'';
+        document.getElementById('o-estimate').value=o.total_estimate||'';
         document.getElementById('o-assign').value=o.assigned_to||'';
         document.getElementById('orderFormTitle').textContent='✏️ Edit Pesanan';
         document.querySelector('#orderForm .create-btn').innerHTML='Update Pesanan';
@@ -988,7 +992,8 @@ document.getElementById('orderForm').addEventListener('submit',async(e)=>{
     services_text:document.getElementById('o-detail').value.trim()||null,
     detail:document.getElementById('o-detail').value.trim()||null,
     scheduled_date:document.getElementById('o-date').value||null,
-    assigned_to:document.getElementById('o-assign').value||null
+    assigned_to:document.getElementById('o-assign').value||null,
+    total_estimate:Number(document.getElementById('o-estimate').value)||0
   };
   try{
     if(editingOrderId){
