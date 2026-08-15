@@ -445,6 +445,12 @@ function buildTaskCard(o){
 
   const services=esc(o.services_text||o.services||o.detail||'');
 
+  // Tombol Navigasi hanya (tanpa telepon/WA)
+  const mapsQuery=encodeURIComponent(o.address||'');
+  const mapsHtml=o.address
+    ?`<a class="qa-btn qa-map" href="https://www.google.com/maps/search/?api=1&query=${mapsQuery}" target="_blank" rel="noopener">🗺️ Navigasi</a>`
+    :'';
+
   let actionHtml='';
   if(status==='belum'){
     actionHtml=`<button class="btn-selesai" data-id="${safeId}" data-status="selesai">✅ Tandai Selesai</button>
@@ -468,6 +474,7 @@ function buildTaskCard(o){
     </div>
     ${services?`<div class="task-services">${services}</div>`:''}
     <div class="task-foot">
+      ${mapsHtml?`<div class="quick-actions">${mapsHtml}</div>`:''}
       <div class="task-actions">${actionHtml}</div>
     </div>
   </div>`;
