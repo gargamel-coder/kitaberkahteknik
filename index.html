@@ -1358,6 +1358,18 @@
             color: #b6bec9;
             cursor: not-allowed;
         }
+        .cal-day.friday {
+            background: #f3efe8;
+            color: #b08d57;
+        }
+        .cal-liburtag {
+            display: block;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            transform: translateY(1px);
+        }
         .cal-day.open { background: #fff; }
         .cal-day.almost {
             background: #fff3e0;
@@ -1399,6 +1411,7 @@
         .dot-open { background: #fff; border: 1px solid #c3ccd6; }
         .dot-almost { background: #ffb74d; }
         .dot-full { background: #e57373; }
+        .dot-friday { background: #b08d57; }
         .cal-hint {
             font-size: 0.72rem;
             color: #8a94a3;
@@ -1806,8 +1819,9 @@
                                 <span><i class="dot dot-full"></i>Penuh</span>
                                 <span><i class="dot dot-almost"></i>Terbatas</span>
                                 <span><i class="dot dot-open"></i>Buka</span>
+                                <span><i class="dot dot-friday"></i>Jumat Libur</span>
                             </div>
-                            <div class="cal-hint">Klik tanggal untuk memilih. Tanggal merah tidak dapat dipilih.</div>
+                            <div class="cal-hint">Klik tanggal untuk memilih. Tanggal merah tidak dapat dipilih. Jumat = libur.</div>
                             <input type="hidden" id="bookingDate" />
                         </div>
                         <div class="cal-chosen" id="calChosen"></div>
@@ -2241,19 +2255,22 @@
                 const isPast = d < today;
                 const isFull = st === 'full';
                 const isAlmost = st === 'almost';
+                const isFriday = d.getDay() === 5; // Jumat libur
                 const clickable = !isPast && !isFull;
 
                 let cls = 'cal-day';
-                if (isPast || isFull) cls += ' disabled';
+                if (isPast || isFull || isFriday) cls += ' disabled';
                 if (isFull) cls += ' full';
                 else if (isAlmost) cls += ' almost';
+                else if (isFriday) cls += ' friday';
                 else if (!isPast) cls += ' open';
                 if (ds === selectedVal) {
                     cls += ' selected';
                 }
 
+                const label = isFriday ? day + ' <span class="cal-liburtag">Libur</span>' : day;
                 html += '<button type="button" class="' + cls.trim() + '" data-date="' + ds + '"' +
-                    (isFull ? ' title="Tanggal penuh — tidak tersedia"' : '') + '>' + day + '</button>';
+                    (isFriday ? ' title="Jumat — libur"' : isFull ? ' title="Tanggal penuh — tidak tersedia"' : '') + '>' + label + '</button>';
             }
             grid.innerHTML = html;
 
@@ -2265,12 +2282,14 @@
                     const d = new Date(ds + 'T00:00:00'); d.setHours(0, 0, 0, 0);
                     const statusEl = document.getElementById('calStatus');
 
-                    // Tolak hari penuh / masa lalu (tombol dinonaktifkan, tapi jaga-jaga)
-                    if (st === 'full' || d < today) {
+                    // Tolak hari penuh / masa lalu / Jumat (tombol dinonaktifkan, tapi jaga-jaga)
+                    if (st === 'full' || d < today || d.getDay() === 5) {
                         statusEl.className = 'cal-status err';
-                        statusEl.textContent = st === 'full'
-                            ? '✖ ' + fmtShortDate(d) + ' sudah penuh. Pilih tanggal lain.'
-                            : '✖ Tidak bisa memilih tanggal di masa lalu.';
+                        statusEl.textContent = d.getDay() === 5
+                            ? '✖ ' + fmtShortDate(d) + ' (Jumat) — libur. Pilih tanggal lain.'
+                            : (st === 'full'
+                                ? '✖ ' + fmtShortDate(d) + ' sudah penuh. Pilih tanggal lain.'
+                                : '✖ Tidak bisa memilih tanggal di masa lalu.');
                         return;
                     }
 
